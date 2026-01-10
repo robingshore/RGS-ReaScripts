@@ -1,10 +1,10 @@
 -- @description Cut/Copy/Delete Automation From Razor Selection
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0
+-- @version 1.0.1
 -- @provides
---    RGS_Cut Automation from Razor Selection.lua
---    RGS_Delete Automation from Razor Selection.lua
+--    [main] RGS_Cut Automation from Razor Selection.lua
+--    [main] RGS_Delete Automation from Razor Selection.lua
 -- @about 
 --  # Cut/Copy/Delete Automation From Razor Selection
 --  

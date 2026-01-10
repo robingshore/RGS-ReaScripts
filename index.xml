@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="RGS ReaScripts" commit="8510c7a39a6432e0a090834867bc9cbcf47cb1b5">
+<index version="1" name="RGS ReaScripts" commit="b3256f0cbcf7865b10544ee433c19c9ff3c0ea79">
+  <category name="Automation">
+    <reapack name="RGS_Copy Automation From Razor Selection.lua" type="script" desc="Cut/Copy/Delete Automation From Razor Selection">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 Cut/Copy/Delete Automation From Razor Selection\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This is a set of actions for cutting, copying, and deleting all track automation data within a razor selection. It is meant to mimic the "Cut/Copy/Clear Special\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab All Automation" command from Pro Tools. When used with a Razor selection that contains both automation envelopes and items these actions will ignore the items and cut, copy ,or only the automation data, even if the envelopes are displayed in the media lane and not in their own dedicated lanes. Automation data that has been cut or copied can then be pasted using reapers native paste functionality\sa180\par}
+}
+]]></description>
+        <link rel="donation">https://paypal.me/robingshore</link>
+      </metadata>
+      <version name="1.0" author="Robin Shore" time="2026-01-10T14:55:55Z">
+        <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/b3256f0cbcf7865b10544ee433c19c9ff3c0ea79/Automation/RGS_Copy%20Automation%20From%20Razor%20Selection.lua</source>
+        <source file="RGS_Cut Automation from Razor Selection.lua">https://github.com/robingshore/RGS-ReaScripts/raw/b3256f0cbcf7865b10544ee433c19c9ff3c0ea79/Automation/RGS_Cut%20Automation%20from%20Razor%20Selection.lua</source>
+        <source file="RGS_Delete Automation from Razor Selection.lua">https://github.com/robingshore/RGS-ReaScripts/raw/b3256f0cbcf7865b10544ee433c19c9ff3c0ea79/Automation/RGS_Delete%20Automation%20from%20Razor%20Selection.lua</source>
+      </version>
+    </reapack>
+  </category>
   <category name="Example">
     <reapack name="cfillion_Hello world.lua" type="script" desc="Hello world">
       <metadata>
@@ -26,29 +47,8 @@ Markdown
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 ReaPack Repository Template\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 A template for GitHub-hosted ReaPack repositories with automated {\field{\*\fldinst{HYPERLINK "https://github.com/cfillion/reapack-index"}}{\fldrslt{\ul
-reapack-index
-}}}
- running from GitHub Actions.\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 Replace the name of the repository in {\field{\*\fldinst{HYPERLINK "/index.xml"}}{\fldrslt{\ul
-index.xml
-}}}
- when using this template. This will be the name shown in ReaPack.\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 \f1 <index version="1" name="Name of your repository here">\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 Replace the contents of this file ({\field{\*\fldinst{HYPERLINK "/README.md"}}{\fldrslt{\ul
-README.md
-}}}
-). This will be the text shown when using ReaPack's "About this repository" feature.\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 reapack-index looks for package files in subfolders. The folder tree represents the package categories shown in ReaPack.\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 Each package file is expected to begin with a metadata header. See {\field{\*\fldinst{HYPERLINK "https://github.com/cfillion/reapack-index/wiki/Packaging-Documentation"}}{\fldrslt{\ul
-Packaging Documentation
-}}}
- on reapack-index's wiki.\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 The URL to import in ReaPack is {\field{\*\fldinst{HYPERLINK "https://github.com/cfillion/reapack-repository-template/raw/master/index.xml"}}{\fldrslt{\ul
-https://github.com/{\f1 <your username>}/{\f1 <repository name>}/raw/master/index.xml
-}}}
-.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 #RGS ReaScripts\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This is a collection of Reaper Scripts created by Robin Shore.\par}
 }
 ]]></description>
   </metadata>

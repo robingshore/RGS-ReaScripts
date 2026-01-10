@@ -26,7 +26,7 @@
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 #RGS ReaScripts\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 RGS ReaScripts\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 This is a collection of Reaper Scripts created by Robin Shore.\par}
 }
 ]]></description>

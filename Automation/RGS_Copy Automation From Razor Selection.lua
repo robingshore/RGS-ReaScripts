@@ -10,7 +10,7 @@
 --  
 --  This is a set of actions for cutting, copying, and deleting all track automation
 --  data within a razor selection. It is meant to mimic the "Cut/Copy/Clear Special
---  - All Automation" command from Pro Tools.
+--  All Automation" command from Pro Tools.
 --  When used with a Razor selection that contains both automation envelopes and
 --  items these actions will ignore the items and cut, copy ,or only the automation
 --  data, even if the envelopes are displayed in the media lane and not in their own 

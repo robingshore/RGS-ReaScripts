@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="RGS ReaScripts" commit="9c050dfc18bad163b457bf3dca094adf44e4062a">
+<index version="1" name="RGS ReaScripts" commit="3811722874d3632a83871f6048fbd1ec9deed43c">
   <category name="Automation">
     <reapack name="RGS_Copy Automation From Razor Selection.lua" type="script" desc="Cut/Copy/Delete Automation From Razor Selection">
       <metadata>
@@ -8,7 +8,8 @@
 \widowctrl\hyphauto
 
 {\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 Cut/Copy/Delete Automation From Razor Selection\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 This is a set of actions for cutting, copying, and deleting all track automation data within a razor selection. It is meant to mimic the "Cut/Copy/Clear Special All Automation" command from Pro Tools. When used with a Razor selection that contains both automation envelopes and items these actions will ignore the items and cut, copy ,or only the automation data, even if the envelopes are displayed in the media lane and not in their own dedicated lanes. Automation data that has been cut or copied can then be pasted using reapers native paste functionality\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This is a set of actions for cutting, copying, and deleting all track automation data within a razor selection. It is meant to mimic the "Cut/Copy/Clear Special All Automation" command from Pro Tools.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 When used with a Razor selection that contains both automation envelopes and items these actions will ignore the items and cut, copy ,or only the automation data, even if the envelopes are displayed in the media lane and not in their own dedicated lanes. Automation data that has been cut or copied can then be pasted using reapers native paste functionality\par}
 }
 ]]></description>
         <link rel="donation">https://paypal.me/robingshore</link>

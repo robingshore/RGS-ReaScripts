@@ -195,6 +195,11 @@
 
 {\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 RGS ReaScripts\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 This is a collection of Reaper Scripts created by Robin Shore.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 These scripts are meant to be installed using {\field{\*\fldinst{HYPERLINK "https://reapack.com/"}}{\fldrslt{\ul
+ReaPack
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Reapack import url: https://raw.githubusercontent.com/robingshore/RGS-ReaScripts/refs/heads/master/index.xml\par}
 }
 ]]></description>
     <link rel="donation">https://paypal.me/robingshore</link>

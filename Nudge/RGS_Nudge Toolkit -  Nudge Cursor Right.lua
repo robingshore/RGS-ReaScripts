@@ -1,4 +1,6 @@
 -- @noindex
+
+
 local function ToBoolean(str)
     local bool = false
     if str == "true" or str == true then

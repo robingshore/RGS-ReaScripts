@@ -1,6 +1,5 @@
 -- @noindex
 
-
 ------------------------------------Get Nudge Values and Settings------------------
 local function ToBoolean(str)
     local bool = false

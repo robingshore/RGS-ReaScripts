@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="RGS ReaScripts" commit="218a87f5c852a001df9321c47ffd745c259142de">
+<index version="1" name="RGS ReaScripts" commit="68058d18994a00100753607d5207939178a95dd0">
   <category name="Automation">
     <reapack name="RGS_Copy Automation From Razor Selection.lua" type="script" desc="Cut/Copy/Delete Automation From Razor Selection">
       <metadata>
@@ -35,6 +35,12 @@
 
 {\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 Nudge Toolkit\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 {\b Nudge Toolkit} is a comprehensive suite of ReaScripts designed to replace and greatly expand REAPER\u8217's native nudge features. The package includes {\b 70+ tightly integrated scripts} for nudging a wide range of elements in REAPER, along with actions for toggling and managing nudge-related settings.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 Highlights\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab {\b Nudge almost anything} - razor selections, media items, automation items, fades, snap offsets, item contents, item start/end positions, loop points, time selections, and the edit cursor. {\i Support for nudging markers and regions is coming soon.}\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab {\b Nudge Box} - A compact, customizable GUI for viewing and editing the current nudge amount and unit.Clicking the word \u8220"Nudge\u8221" opens quick access to additional settings and features.Nudge Box can be styled to match your REAPER theme and is designed to live in the transport bar, though it can be freely positioned anywhere on screen.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab {\b Contextual Nudge} - \u8220"Smart\u8221" nudge actions that automatically adapt to your current selection.\u8232 ?Contextual Nudge actions use the following priority order: {\b razor edits \u8594 ? media & automation items \u8594 ? edit cursor.}\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Toggleable options to move razor edits with or without their contents.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Fully respects REAPER\u8217's ripple editing, trim behind, and snap settings.\sa180\par}
 }
 ]]></description>
         <link rel="screenshot">https://i.ibb.co/LzWpMDRt/Nudge-Box-screenshot.gif</link>

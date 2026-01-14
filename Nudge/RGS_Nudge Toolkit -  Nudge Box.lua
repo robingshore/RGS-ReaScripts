@@ -1,11 +1,10 @@
 -- @description Nudge Toolkit
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0.2
+-- @version 1.0.3
 -- @screenshot https://i.ibb.co/LzWpMDRt/Nudge-Box-screenshot.gif
 -- @provides
 --    [main] *.lua
---    [main] *.Lua
 --
 -- @about 
 --  # Nudge Toolkit
@@ -29,7 +28,7 @@
 --  on screen.
 --  
 --  - **Contextual Nudge** - “Smart” nudge actions that automatically adapt to your
---  current selection. Contextual Nudge actions use the following priority order:
+--  current selection.Contextual Nudge actions use the following priority order:
 --  **razor edits → media & automation items → edit cursor.**
 --  
 --  - Toggleable options to move razor edits with or without their contents.
@@ -37,7 +36,7 @@
 --  - Fully respects REAPER’s ripple editing, trim behind, and snap settings.
 
 local ScriptName = "Nudge Box"
-local ScriptVersion = "1.0.2"
+local ScriptVersion = "1.0.3"
 
 local debug = false
 local profiler

@@ -60,6 +60,33 @@ local function TrimFadeins(nudge)
         reaper.SetMediaItemInfo_Value(item,"D_FADEINLEN", fadein_length + nudge)
     end
 end
+
+local function ApplyNudgeRGS(project, nudgeflag, nudgewhat, nudgeunits, value, reverse, copies)
+    if nudgeunits == 16 then
+    local bar_value, beat_value, sub_beat_value = value:match("([^%.]+)%.([^%.]+)%.([^%.]+)")
+    bar_value = tonumber(bar_value)
+    beat_value = tonumber(beat_value)
+    sub_beat_value = tonumber(sub_beat_value)
+
+        if sub_beat_value > 0 then
+            reaper.ApplyNudge(project, 0, nudgewhat, nudgeunits, bar_value, reverse, copies)
+            for i = 1, beat_value do
+                reaper.ApplyNudge(project, 0, nudgewhat, nudgeunits, 0.1, reverse, copies)
+            end
+            reaper.ApplyNudge(project, nudgeflag, nudgewhat, nudgeunits, sub_beat_value/1000, reverse, copies)
+        elseif beat_value > 0 then
+            reaper.ApplyNudge(project, 0, nudgewhat, nudgeunits, bar_value, reverse, copies)
+            for i = 1, beat_value -1 do
+                reaper.ApplyNudge(project, 0, nudgewhat, nudgeunits, 0.1, reverse, copies)
+            end
+            reaper.ApplyNudge(project, nudgeflag, nudgewhat, nudgeunits, 0.1, reverse, copies)
+        else
+            reaper.ApplyNudge(project, nudgeflag, nudgewhat, nudgeunits, bar_value, reverse, copies)
+        end
+    else
+        reaper.ApplyNudge(project, nudgeflag, nudgewhat, nudgeunits, value, reverse, copies)
+    end
+end
 ----------------------------------------
 local nudge_unit
 local nudge_amount
@@ -83,11 +110,15 @@ end
 
 local function Main()
      if reaper.CountSelectedMediaItems(0) > 0 then
+        for i = 0, reaper.CountSelectedMediaItems(0) -1 do
+            local item = reaper.GetSelectedMediaItem(0,i)
+            if reaper.GetMediaItemInfo_Value(item, "C_LOCK") == 1 then return end
+        end
         local first_fadein_end = GetFirstSelectedItemFadeIn()
         local shortest_fadein = GetShortestSelectedFadeIn()
         local initial_cur_pos = reaper.GetCursorPosition()
         reaper.SetEditCurPos(first_fadein_end, false, false)
-        reaper.ApplyNudge(0, snap, 6, nudge_unit, nudge_amount, true, 0)
+        ApplyNudgeRGS(0, snap, 6, nudge_unit, nudge_amount, true, 0)
         local nudge = first_fadein_end - reaper.GetCursorPosition()
         reaper.SetEditCurPos(initial_cur_pos, false, false)
 

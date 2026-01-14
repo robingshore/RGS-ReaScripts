@@ -1,6 +1,41 @@
--- @noindex
+-- @description Nudge Toolkit
+-- @author Robin Shore
+-- @donation https://paypal.me/robingshore
+-- @version 1.0
+-- @screenshot https://i.ibb.co/LzWpMDRt/Nudge-Box-screenshot.gif
+-- @provides
+--    [main] *.lua
+-- @about 
+--  # Nudge Toolkit
+--
+--  **Nudge Toolkit** is a comprehensive suite of ReaScripts designed to replace and
+--  greatly expand REAPER’s native nudge features. The package includes **70+ tightly
+--  integrated scripts** for nudging a wide range of elements in REAPER, along with
+--  actions for toggling and managing nudge-related settings.
+
+--  ## Highlights
+
+--  - **Nudge almost anything** -  razor selections, media items, automation items,
+--  fades, snap offsets, item contents, item start/end positions, loop points,
+--  time selections, and the edit cursor. *Support for nudging markers and regions
+--  is coming soon.*
+--  
+--  - **Nudge Box** - A compact, customizable GUI for viewing and editing the current
+--  nudge amount and unit.Clicking the word “Nudge” opens quick access to additional
+--  settings and features.Nudge Box can be styled to match your REAPER theme and is
+--  designed to live in the transport bar, though it can be freely positioned anywhere
+--  on screen.
+--  
+--  - **Contextual Nudge** - “Smart” nudge actions that automatically adapt to your
+--  current selection. Contextual Nudge actions use the following priority order:
+--  **razor edits → media & automation items → edit cursor.**
+--  
+--  - Toggleable options to move razor edits with or without their contents.
+--  
+--  - Fully respects REAPER’s ripple editing, trim behind, and snap settings.
+
 local ScriptName = "Nudge Box"
-local ScriptVersion = "0.8"
+local ScriptVersion = "1.0"
 
 local debug = false
 local profiler

@@ -124,11 +124,15 @@ end
 
 local function Main()
      if reaper.CountSelectedMediaItems(0) > 0 then
+        for i = 0, reaper.CountSelectedMediaItems(0) -1 do
+            local item = reaper.GetSelectedMediaItem(0,i)
+            if reaper.GetMediaItemInfo_Value(item, "C_LOCK") == 1 then return end
+        end
         local first_fadeout_start = GetFirstSelectedItemFadeOut()
         local shortest_fadeout = GetShortestSelectedFadeOut()
         local initial_cur_pos = reaper.GetCursorPosition()
         reaper.SetEditCurPos(first_fadeout_start, false, false)
-        reaper.ApplyNudge(0, snap, 6, nudge_unit, nudge_amount, false, 0)
+        ApplyNudgeRGS(0, snap, 6, nudge_unit, nudge_amount, false, 0)
         local nudge = reaper.GetCursorPosition()- first_fadeout_start
         reaper.SetEditCurPos(initial_cur_pos, false, false)
 

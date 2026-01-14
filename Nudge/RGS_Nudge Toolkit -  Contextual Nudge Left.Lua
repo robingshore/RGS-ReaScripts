@@ -1,8 +1,4 @@
 -- @noindex
---------------------------Debug & Testing -----------------------------------
-
------------------------------------------------------------------------------------
-
 
 
 ------------------------------------Get Nudge Values and Settings------------------
@@ -704,22 +700,53 @@ local function GetFirstSelectedItemEdge(include_snap_offset)
     return first_edge, first_item
 end
 
-local function NudgeAutoItems(nudge_amount)
-    for i = 0, reaper.CountTracks(0)-1 do
-        local track = reaper.GetTrack(0, i)
-        for j = 0, reaper.CountTrackEnvelopes(track)-1 do
-            local env = reaper.GetTrackEnvelope(track, j)
-            local _, env_vis = reaper.GetSetEnvelopeInfo_String(env, "VISIBLE", "", false)
-            if tonumber(env_vis) == 1 then
-                for k = 0, reaper.CountAutomationItems(env) - 1 do
-                    if reaper.GetSetAutomationItemInfo(env ,k, "D_UISEL", 0, false) ~=0 then
-                        local position = reaper.GetSetAutomationItemInfo(env,k,"D_POSITION", 0, false )    
-                        reaper.GetSetAutomationItemInfo(env,k,"D_POSITION", position + nudge_amount, true)
+local function NudgeAutoItems(nudge_amount, move_with_media_items)
+    if move_with_media_items == 0 then
+        for i = 0, reaper.CountTracks(0)-1 do
+            local track = reaper.GetTrack(0, i)
+            for j = 0, reaper.CountTrackEnvelopes(track)-1 do
+                local env = reaper.GetTrackEnvelope(track, j)
+                local _, env_vis = reaper.GetSetEnvelopeInfo_String(env, "VISIBLE", "", false)
+                if tonumber(env_vis) == 1 then
+                    for k = 0, reaper.CountAutomationItems(env) - 1 do
+                        if reaper.GetSetAutomationItemInfo(env ,k, "D_UISEL", 0, false) ~=0 then
+                            local position = reaper.GetSetAutomationItemInfo(env,k,"D_POSITION", 0, false )    
+                            reaper.GetSetAutomationItemInfo(env,k,"D_POSITION", position + nudge_amount, true)
+                        end
+                    end
+                end
+            end
+        end
+    else
+        for i = 0, reaper.CountTracks(0)-1 do
+            local track = reaper.GetTrack(0, i)
+            for j = 0, reaper.CountTrackEnvelopes(track)-1 do
+                local env = reaper.GetTrackEnvelope(track, j)
+                local _, env_vis = reaper.GetSetEnvelopeInfo_String(env, "VISIBLE", "", false)
+                if tonumber(env_vis) == 1 then
+                    for k = 0, reaper.CountAutomationItems(env) - 1 do
+                        if reaper.GetSetAutomationItemInfo(env ,k, "D_UISEL", 0, false) ~=0 then
+                            local move_item = true
+                            local auto_item_start = reaper.GetSetAutomationItemInfo(env,k,"D_POSITION", 0, false )
+                            local auto_item_length = reaper.GetSetAutomationItemInfo(env,k,"D_LENGTH",0,false)
+                            local auto_item_end = auto_item_length + auto_item_start
+                            for l = 0, reaper.CountTrackMediaItems(track) -1 do
+                                local item = reaper.GetTrackMediaItem(track, l)
+                                if reaper.GetMediaItemInfo_Value(item, "B_UISEL") == 1 then
+                                    move_item = false
+                                    break
+                                end
+                            end
+                            if move_item then
+                                reaper.GetSetAutomationItemInfo(env,k,"D_POSITION", auto_item_start + nudge_amount, true)
+                            end
+                        end
                     end
                 end
             end
         end
     end
+
 end
 
 -----------------Main----------------------------
@@ -731,7 +758,7 @@ local function Main()
     ----------------- Get Nudge Value in seconds
     ApplyNudgeRGS(0, snap, 6, nudge_unit, nudge_amount, false, 0)
     local nudge =  reaper.GetCursorPosition() - cur_pos_1
-    reaper.SetEditCurPos(cur_pos_1, false, false) 
+    reaper.SetEditCurPos(cur_pos_1, false, false)
     reaper.Undo_BeginBlock()
     if RazorExists() then
         local selected_envelope = reaper.GetSelectedEnvelope(0)
@@ -1087,25 +1114,37 @@ local function Main()
 
     
 
-    if not RazorExists() and reaper.CountSelectedMediaItems(0) > 0 then
-        local first_selected_auto_edge = GetFirstSelectedAutoItemEdge()
+    if not RazorExists() and reaper.CountSelectedMediaItems(0) > 0 and AutoItemSelected() then
+        
         local first_selected_item_edge, first_selected_item = GetFirstSelectedItemEdge()
         local snap_offset = reaper.GetMediaItemInfo_Value(first_selected_item,"D_SNAPOFFSET")
+        local first_selected_item_edge = first_selected_item_edge + snap_offset
+        local first_selected_auto_edge = GetFirstSelectedAutoItemEdge()
+         local first_selected_is_auto = false
+         if first_selected_auto_edge < first_selected_item_edge then
+            first_selected_item_edge = first_selected_auto_edge
+            first_selected_is_auto = true
+        end
         local move_points = reaper.GetToggleCommandState(40070) --Options: Move envelope points with media items
+        
         -- re-get nudge value if nudge snapping is turned on
         if snap == 2 then
-            reaper.SetEditCurPos(first_selected_item_edge + snap_offset, false, false)
+            reaper.SetEditCurPos(first_selected_item_edge, false, false)
             ApplyNudgeRGS(0, snap, 6, nudge_unit, nudge_amount, true, 0)
-            nudge = (first_selected_item_edge + snap_offset) - reaper.GetCursorPosition()
+            nudge = first_selected_item_edge - reaper.GetCursorPosition()
             reaper.SetEditCurPos(cur_pos_1,false,false)
         end
-        if first_selected_auto_edge == nil or first_selected_auto_edge  > nudge then
-            ApplyNudgeRGS(0, snap, 0, nudge_unit, nudge_amount, true, 0)
-        end
-        if AutoItemSelected() and move_points == 0 and first_selected_auto_edge > nudge and first_selected_item_edge > nudge then
-            NudgeAutoItems(-nudge)
+        
+        if first_selected_item_edge > nudge then
+            if first_selected_is_auto and snap == 2 then
+                reaper.ApplyNudge(0,0,0,1,nudge,true,0)
+            else
+                ApplyNudgeRGS(0, snap, 0, nudge_unit, nudge_amount, true, 0)
+            end
+            NudgeAutoItems(-nudge, move_points)
         end
     end
+
 
     if not RazorExists() and reaper.CountSelectedMediaItems(0) == 0 and AutoItemSelected() then
         local first_selected_auto_edge = GetFirstSelectedAutoItemEdge()
@@ -1117,9 +1156,13 @@ local function Main()
             reaper.SetEditCurPos(cur_pos_1,false,false)
         end
         if first_selected_auto_edge > nudge then
-            NudgeAutoItems(-nudge)
+            NudgeAutoItems(-nudge, 0)
         end
     end 
+
+    if not RazorExists() and reaper.CountSelectedMediaItems(0)>0 and not AutoItemSelected() then
+        ApplyNudgeRGS(0, snap, 0, nudge_unit, nudge_amount, true, 0)
+    end
 
     if not RazorExists() and reaper.CountSelectedMediaItems(0) == 0 and not AutoItemSelected() then
         ApplyNudgeRGS(0, snap, 6, nudge_unit, nudge_amount, true, 0)

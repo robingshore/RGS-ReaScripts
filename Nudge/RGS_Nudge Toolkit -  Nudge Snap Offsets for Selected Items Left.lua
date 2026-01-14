@@ -14,57 +14,49 @@ local function ToBoolean(str)
     return bool
 end
 
-local function GetFirstSelectedItemFadeIn(include_snap_offset)
+local function GetFirstSelectedItemSnapOffset()
     local item_count = reaper.CountSelectedMediaItems(0)
     local first_edge = reaper.GetMediaItemInfo_Value(reaper.GetSelectedMediaItem(0, 0), "D_POSITION")
     local first_item = reaper.GetSelectedMediaItem(0,0)
-    local first_fadein_length = reaper.GetMediaItemInfo_Value(reaper.GetSelectedMediaItem(0, 0), "D_FADEINLEN")
-    local first_fadein_end = first_edge + first_fadein_length
+    local first_snap_offset = reaper.GetMediaItemInfo_Value(reaper.GetSelectedMediaItem(0, 0), "D_SNAPOFFSET")
+    local first_snap_offset_time = first_edge + first_snap_offset
     if item_count > 1 then
         for i = 1, item_count - 1 do
             local item = reaper.GetSelectedMediaItem(0, i)
             local item_start = reaper.GetMediaItemInfo_Value(item, "D_POSITION")
-            local fadein_length = reaper.GetMediaItemInfo_Value(item, "D_FADEINLEN")
-            local fadein_end = item_start + fadein_length
+            local snap_offset = reaper.GetMediaItemInfo_Value(item, "D_SNAPOFFSET")
+            local snap_offset_time = item_start + snap_offset
             if item_start < first_edge then 
-                first_edge = item_start 
+                first_edge = item_start
                 first_item = item
-                first_fadein_length = fadein_length
-                first_fadein_end = fadein_end
+                first_snap_offset = snap_offset
+                first_snap_offset_time = snap_offset_time
             end
         end
     end
-    return first_fadein_end, first_fadein_length, first_item
+    return first_snap_offset_time, first_snap_offset, first_item
 end
 
-local function GetShortestSelectedUnFadedArea()
+local function GetShortestSelectedSnapOffset()
     local item_count = reaper.CountSelectedMediaItems(0)
-    local length = reaper.GetMediaItemInfo_Value(reaper.GetSelectedMediaItem(0, 0), "D_LENGTH")
-    local fadein_length = reaper.GetMediaItemInfo_Value(reaper.GetSelectedMediaItem(0, 0), "D_FADEINLEN")
-    local fadeout_length = reaper.GetMediaItemInfo_Value(reaper.GetSelectedMediaItem(0, 0), "D_FADEOUTLEN")
-    local shortest_unfaded_area = length - (fadein_length+fadeout_length)
-    local shortest_unfaded_area_item = reaper.GetSelectedMediaItem(0,0)
+    local shortest_snap_offset = reaper.GetMediaItemInfo_Value(reaper.GetSelectedMediaItem(0, 0), "D_SNAPOFFSET")
     if item_count > 1 then
         for i = 1, item_count - 1 do
             local item = reaper.GetSelectedMediaItem(0, i)
-            local length= reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
-            local fadein_length = reaper.GetMediaItemInfo_Value(item, "D_FADEINLEN")
-            local fadeout_length = reaper.GetMediaItemInfo_Value(item, "D_FADEOUTLEN")
-            local unfaded_area = length - (fadein_length+fadeout_length)
-            if unfaded_area < shortest_unfaded_area then 
-                shortest_unfaded_area = unfaded_area
-                shortest_unfaded_area_item = item
+            local snap_offset = reaper.GetMediaItemInfo_Value(item, "D_SNAPOFFSET")
+            if snap_offset < shortest_snap_offset then 
+                shortest_snap_offset = snap_offset
             end
         end
     end
-    return shortest_unfaded_area, shortest_unfaded_area_item
+    return shortest_snap_offset
 end
 
-local function TrimFadeins(nudge)
+local function TrimSnapOffsets(nudge)
     for i = 0, reaper.CountSelectedMediaItems(0) - 1 do
         local item = reaper.GetSelectedMediaItem(0,i)
-        fadein_length = reaper.GetMediaItemInfo_Value(item, "D_FADEINLEN")
-        reaper.SetMediaItemInfo_Value(item,"D_FADEINLEN", fadein_length + nudge)
+        local snap_offset = reaper.GetMediaItemInfo_Value(item, "D_SNAPOFFSET")
+        reaper.SetMediaItemInfo_Value(item,"D_SNAPOFFSET", snap_offset - nudge)
     end
 end
 
@@ -121,16 +113,16 @@ local function Main()
             local item = reaper.GetSelectedMediaItem(0,i)
             if reaper.GetMediaItemInfo_Value(item, "C_LOCK") == 1 then return end
         end
-        local first_fadein_end = GetFirstSelectedItemFadeIn()
-        local shortest_unfaded_area = GetShortestSelectedUnFadedArea()
+        local first_snap_offset_time = GetFirstSelectedItemSnapOffset()
+        local shortest_snap_offset = GetShortestSelectedSnapOffset()
         local initial_cur_pos = reaper.GetCursorPosition()
-        reaper.SetEditCurPos(first_fadein_end, false, false)
-        ApplyNudgeRGS(0, snap, 6, nudge_unit, nudge_amount, false, 0)
-        local nudge = reaper.GetCursorPosition() - first_fadein_end
+        reaper.SetEditCurPos(first_snap_offset_time, false, false)
+        ApplyNudgeRGS(0, snap, 6, nudge_unit, nudge_amount, true, 0)
+        local nudge = first_snap_offset_time -reaper.GetCursorPosition()
         reaper.SetEditCurPos(initial_cur_pos, false, false)
 
-        if nudge < shortest_unfaded_area then
-            TrimFadeins(nudge)
+        if nudge < shortest_snap_offset then
+            TrimSnapOffsets(nudge)
         end
     end
 end

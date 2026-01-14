@@ -145,6 +145,10 @@ end
 
 local function Main()
      if reaper.CountSelectedMediaItems(0) > 0 then
+        for i = 0, reaper.CountSelectedMediaItems(0) -1 do
+            local item = reaper.GetSelectedMediaItem(0,i)
+            if reaper.GetMediaItemInfo_Value(item, "C_LOCK") == 1 then return end
+        end
         local first_fadeout_start = GetFirstSelectedItemFadeOut()
         local shortest_unfaded_area = GetShortestSelectedUnFadedArea()
         local initial_cur_pos = reaper.GetCursorPosition()

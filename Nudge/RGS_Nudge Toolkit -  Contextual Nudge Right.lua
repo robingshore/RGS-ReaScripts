@@ -1,8 +1,7 @@
 -- @noindex
---------------------------Debug & Testing -----------------------------------------
------------------------------------------------------------------------------------
---------------------------Get External Variables ----------------------------------
 
+
+local ScriptName = "Contextual Nudge Right"
 local no_sws
 if not reaper.SNM_GetIntConfigVar then
     no_sws = true
@@ -15,6 +14,8 @@ if no_sws then
     end
     return
 end
+--------------------------Get External Variables ----------------------------------
+
 
 local function ToBoolean(str)
     local bool = false

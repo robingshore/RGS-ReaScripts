@@ -1,7 +1,7 @@
 -- @description Nudge Toolkit
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0
+-- @version 1.0.1
 -- @screenshot https://i.ibb.co/LzWpMDRt/Nudge-Box-screenshot.gif
 -- @provides
 --    [main] *.lua
@@ -35,7 +35,7 @@
 --  - Fully respects REAPER’s ripple editing, trim behind, and snap settings.
 
 local ScriptName = "Nudge Box"
-local ScriptVersion = "1.0"
+local ScriptVersion = "1.0.1"
 
 local debug = false
 local profiler
@@ -1289,10 +1289,13 @@ local function loop()
         nudge_value = reaper.GetExtState("RGS_Nudge", "nudge_value")
     else
         nudge_value = tonumber(reaper.GetExtState("RGS_Nudge", "nudge_value"))
+
     end
+    
     if selected_nudge_unit ~= tonumber(reaper.GetExtState("RGS_Nudge", "selected_nudge_unit")) then
         unit_switched = true
     end
+    
     if not reaper.HasExtState("RGS_Nudge", "selected_nudge_unit") then
         selected_nudge_unit = 1
     elseif unit_switched or reaper.GetExtState("RGS_Nudge", "unit_switched") == "true" then
@@ -1301,8 +1304,18 @@ local function loop()
         selected_nudge_unit = tonumber(reaper.GetExtState("RGS_Nudge", "selected_nudge_unit"))
         if nudge_units[selected_nudge_unit].unit == "Measures.Beat" then
             nudge_value = reaper.GetExtState("RGS_Nudge", "unit_" .. tostring(selected_nudge_unit) .. "_nudge_value")
+            if nudge_value == "" then
+                nudge_value = nudge_units[selected_nudge_unit].presets[1].value
+            end
         else
             nudge_value = tonumber(reaper.GetExtState("RGS_Nudge", "unit_" .. tostring(selected_nudge_unit) .. "_nudge_value"))
+            if not nudge_value then 
+                if nudge_units[selected_nudge_unit].is_note then
+                    nudge_value = 1
+                else
+                    nudge_value = nudge_units[selected_nudge_unit].presets[1].value
+                end
+            end
         end
         for i = 1, #nudge_units do
             nudge_units[i].selected = false
@@ -1310,7 +1323,6 @@ local function loop()
         nudge_units[selected_nudge_unit].selected = true
         unit_switched = false
     end
-
 
     ImGui.SetNextWindowSize(ctx, gui_w, gui_h, ImGui.Cond_FirstUseEver)
 
@@ -2161,7 +2173,6 @@ local function loop()
             -- Set other modes to inactive
             minutes_seconds_activated = false
             tc_activated = false
-
             bar_value, beat_value, sub_beat_value = nudge_value:match("([^%.]+)%.([^%.]+)%.([^%.]+)")
 
             --Minimums

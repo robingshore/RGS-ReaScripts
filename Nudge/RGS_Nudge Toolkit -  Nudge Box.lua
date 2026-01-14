@@ -12,9 +12,9 @@
 --  greatly expand REAPER’s native nudge features. The package includes **70+ tightly
 --  integrated scripts** for nudging a wide range of elements in REAPER, along with
 --  actions for toggling and managing nudge-related settings.
-
+--
 --  ## Highlights
-
+--
 --  - **Nudge almost anything** -  razor selections, media items, automation items,
 --  fades, snap offsets, item contents, item start/end positions, loop points,
 --  time selections, and the edit cursor. *Support for nudging markers and regions

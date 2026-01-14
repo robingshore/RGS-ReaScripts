@@ -1,6 +1,18 @@
 -- @noindex
 
 
+local no_sws
+if not reaper.SNM_GetIntConfigVar then
+    no_sws = true
+end
+
+if no_sws then
+     reaper.MB("SWS/S&M extension is required to run this script:\n Please install the missing extension\nand run the script again",ScriptName, 0)
+    if reaper.ReaPack_BrowsePackages then
+        reaper.ReaPack_BrowsePackages("SWS/S&M extension")
+    end
+    return
+end
 
 local nudge_unit
 local nudge_amount

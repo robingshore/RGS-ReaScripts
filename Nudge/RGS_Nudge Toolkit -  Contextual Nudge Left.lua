@@ -7,7 +7,7 @@ if not reaper.SNM_GetIntConfigVar then
 end
 
 if no_sws then
-     reaper.MB("SWS/S&M extension is required\nto run this script:\nPlease install the missing extension\nand run the script again",ScriptName, 0)
+     reaper.MB("SWS/S&M extension is\nrequired to run this script:\nPlease install the missing extension\nand run the script again",ScriptName, 0)
     if reaper.ReaPack_BrowsePackages then
         reaper.ReaPack_BrowsePackages("SWS/S&M extension")
     end

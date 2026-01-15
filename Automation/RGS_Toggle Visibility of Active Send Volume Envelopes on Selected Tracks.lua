@@ -1,13 +1,13 @@
 -- @description Toggle Visibility of Send Envelopes on Selected Tracks
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0.1
+-- @version 1.0.2
 -- @provides
 --    [main] RGS_Toggle Visibility of Active Send Mute Envelopes on Selected Tracks.lua
---    [main] RGS_Toggle Visibility of Active Send Pan Envelopes on Selected Tracks
---    [main] RGS_Toggle Visibility of All Send Mute Envelopes on Selected Tracks (activates unactive envelopes)
---    [main] RGS_Toggle Visibility of All Send Pan Envelopes on Selected Tracks (activates unactive envelopes)
---    [main] RGS_Toggle Visibility of All Send Volume Envelopes on Selected Tracks (activates unactive envelopes)
+--    [main] RGS_Toggle Visibility of Active Send Pan Envelopes on Selected Tracks.lu
+--    [main] RGS_Toggle Visibility of All Send Mute Envelopes on Selected Tracks (activates unactive envelopes).lua
+--    [main] RGS_Toggle Visibility of All Send Pan Envelopes on Selected Tracks (activates unactive envelopes).lua
+--    [main] RGS_Toggle Visibility of All Send Volume Envelopes on Selected Tracks (activates unactive envelopes).lua
 -- @about 
 --  # Toggle Visibility of Send Envelopes on Selected Tracks
 --  

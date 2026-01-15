@@ -1,8 +1,7 @@
-
 -- @description Show selected item count in help display if any items are selected
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0
+-- @version 1.0.1
 -- @about 
 --  # Show Selected Item Count in help Display if any items are selected
 --  

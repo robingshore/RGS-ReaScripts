@@ -1,9 +1,13 @@
 -- @description Save/Load/Clear latch presets with prompt for preset number
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0
+-- @version 1.0.1
 -- @provides
---    [main] *RGS_Save current envelope values
+--    [main] RGS_Load latch preset for all tracks (prompt for preset number).lua
+--    [main] RGS_Load latch preset for selected tracks (prompt for preset number).lua
+--    [main] RGS_Save latch preset for all tracks (prompt for preset number).lua
+--    [main] RGS_Save latch preset for selected tracks (prompt for preset number).lua
+
 -- @about 
 --  # Save/Load/Clear latch presets with prompt for preset number
 --

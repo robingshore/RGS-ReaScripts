@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="RGS ReaScripts" commit="ed2dccea861ac073965d94062bba298bb4481fc0">
+<index version="1" name="RGS ReaScripts" commit="6987170c3225d2f18203bc24676d21d80dd60553">
   <category name="Automation">
     <reapack name="RGS_Copy Automation From Razor Selection.lua" type="script" desc="Cut/Copy/Delete Automation From Razor Selection">
       <metadata>
@@ -23,6 +23,27 @@
         <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/98fd4930e49fc979943f94fb4ef22bb843b4fc25/Automation/RGS_Copy%20Automation%20From%20Razor%20Selection.lua</source>
         <source main="main" file="RGS_Cut Automation from Razor Selection.lua">https://github.com/robingshore/RGS-ReaScripts/raw/98fd4930e49fc979943f94fb4ef22bb843b4fc25/Automation/RGS_Cut%20Automation%20from%20Razor%20Selection.lua</source>
         <source main="main" file="RGS_Delete Automation from Razor Selection.lua">https://github.com/robingshore/RGS-ReaScripts/raw/98fd4930e49fc979943f94fb4ef22bb843b4fc25/Automation/RGS_Delete%20Automation%20from%20Razor%20Selection.lua</source>
+      </version>
+    </reapack>
+    <reapack name="RGS_Toggle Visibility of Active Send Volume Envelopes on Selected Tracks.lua" type="script" desc="Toggle Visibility of Send Envelopes on Selected Tracks">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 Toggle Visibility of Send Envelopes on Selected Tracks\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This is a set scripts for showing/hiding send envelopes on selected tracks. it includes separate actiongs for send volume, send pan and send mute envelopes\par}
+}
+]]></description>
+        <link rel="donation">https://paypal.me/robingshore</link>
+      </metadata>
+      <version name="1.0.3" author="Robin Shore" time="2026-01-15T17:12:34Z">
+        <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/6987170c3225d2f18203bc24676d21d80dd60553/Automation/RGS_Toggle%20Visibility%20of%20Active%20Send%20Volume%20Envelopes%20on%20Selected%20Tracks.lua</source>
+        <source main="main" file="RGS_Toggle Visibility of Active Send Mute Envelopes on Selected Tracks.lua">https://github.com/robingshore/RGS-ReaScripts/raw/6987170c3225d2f18203bc24676d21d80dd60553/Automation/RGS_Toggle%20Visibility%20of%20Active%20Send%20Mute%20Envelopes%20on%20Selected%20Tracks.lua</source>
+        <source main="main" file="RGS_Toggle Visibility of Active Send Pan Envelopes on Selected Tracks.lua">https://github.com/robingshore/RGS-ReaScripts/raw/6987170c3225d2f18203bc24676d21d80dd60553/Automation/RGS_Toggle%20Visibility%20of%20Active%20Send%20Pan%20Envelopes%20on%20Selected%20Tracks.lua</source>
+        <source main="main" file="RGS_Toggle Visibility of All Send Mute Envelopes on Selected Tracks (activates unactive envelopes).lua">https://github.com/robingshore/RGS-ReaScripts/raw/6987170c3225d2f18203bc24676d21d80dd60553/Automation/RGS_Toggle%20Visibility%20of%20All%20Send%20Mute%20Envelopes%20on%20Selected%20Tracks%20(activates%20unactive%20envelopes).lua</source>
+        <source main="main" file="RGS_Toggle Visibility of All Send Pan Envelopes on Selected Tracks (activates unactive envelopes).lua">https://github.com/robingshore/RGS-ReaScripts/raw/6987170c3225d2f18203bc24676d21d80dd60553/Automation/RGS_Toggle%20Visibility%20of%20All%20Send%20Pan%20Envelopes%20on%20Selected%20Tracks%20(activates%20unactive%20envelopes).lua</source>
+        <source main="main" file="RGS_Toggle Visibility of All Send Volume Envelopes on Selected Tracks (activates unactive envelopes).lua">https://github.com/robingshore/RGS-ReaScripts/raw/6987170c3225d2f18203bc24676d21d80dd60553/Automation/RGS_Toggle%20Visibility%20of%20All%20Send%20Volume%20Envelopes%20on%20Selected%20Tracks%20(activates%20unactive%20envelopes).lua</source>
       </version>
     </reapack>
   </category>

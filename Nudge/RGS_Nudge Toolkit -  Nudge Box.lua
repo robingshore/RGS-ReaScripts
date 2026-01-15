@@ -1,7 +1,7 @@
 -- @description Nudge Toolkit
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0.9
+-- @version 1.1.0
 -- @screenshot https://i.ibb.co/LzWpMDRt/Nudge-Box-screenshot.gif
 -- @provides
 --    [main] *.lua
@@ -36,7 +36,7 @@
 --  - Fully respects REAPER’s ripple editing, trim behind, and snap settings.
 
 local ScriptName = "Nudge Box"
-local ScriptVersion = "1.0.9"
+local ScriptVersion = "1.1.0"
 
 local debug = false
 local profiler

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="RGS ReaScripts" commit="26b13a6985f5a77e32a4bb8d8039eb1b287bbbe9">
+<index version="1" name="RGS ReaScripts" commit="ed2dccea861ac073965d94062bba298bb4481fc0">
   <category name="Automation">
     <reapack name="RGS_Copy Automation From Razor Selection.lua" type="script" desc="Cut/Copy/Delete Automation From Razor Selection">
       <metadata>
@@ -887,6 +887,24 @@
         <source main="main" file="RGS_Nudge Toolkit -  Toggle Nudge Items with Razor Edits.lua">https://github.com/robingshore/RGS-ReaScripts/raw/26b13a6985f5a77e32a4bb8d8039eb1b287bbbe9/Nudge/RGS_Nudge%20Toolkit%20-%20%20Toggle%20Nudge%20Items%20with%20Razor%20Edits.lua</source>
         <source main="main" file="RGS_Nudge Toolkit -  Toggle Nudge Time Selection with Razor Edits.lua">https://github.com/robingshore/RGS-ReaScripts/raw/26b13a6985f5a77e32a4bb8d8039eb1b287bbbe9/Nudge/RGS_Nudge%20Toolkit%20-%20%20Toggle%20Nudge%20Time%20Selection%20with%20Razor%20Edits.lua</source>
         <source main="main" file="RGS_Nudge Toolkit -  Toggle Snap to Unit.lua">https://github.com/robingshore/RGS-ReaScripts/raw/26b13a6985f5a77e32a4bb8d8039eb1b287bbbe9/Nudge/RGS_Nudge%20Toolkit%20-%20%20Toggle%20Snap%20to%20Unit.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Utility">
+    <reapack name="RGS_Show Selected Item Count in Help Display if items are selected.lua" type="script" desc="Show selected item count in help display if any items are selected">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 Show Selected Item Count in help Display if any items are selected\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This is a lighttweight utility meant to be left running in the background. When media items are selected, it temporarily replaces the info display text below the TCP with a live count of the selected items.\par}
+}
+]]></description>
+        <link rel="donation">https://paypal.me/robingshore</link>
+      </metadata>
+      <version name="1.0.1" author="Robin Shore" time="2026-01-15T16:59:13Z">
+        <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/ed2dccea861ac073965d94062bba298bb4481fc0/Utility/RGS_Show%20Selected%20Item%20Count%20in%20Help%20Display%20if%20items%20are%20selected.lua</source>
       </version>
     </reapack>
   </category>

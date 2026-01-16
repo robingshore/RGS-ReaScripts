@@ -11,8 +11,8 @@
 -- @about 
 --  # Toggle Visibility of Send Envelopes on Selected Tracks
 --  
---  This is a set scripts for showing/hiding send envelopes on selected tracks. it
---  includes separate actiongs for send volume, send pan and send mute envelopes
+--  This is a set scripts for showing/hiding send envelopes on selected tracks. It
+--  includes separate actions for send volume, send pan and send mute envelopes
 
 
 --------------------Functions-------------------------

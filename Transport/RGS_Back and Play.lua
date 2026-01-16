@@ -1,15 +1,15 @@
 -- @description Back and Play
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0.1
+-- @version 1.0.2
 -- @provides
 --    [main] RGS_Back and Play Settings.lua
 -- @about 
---  #Back and Play
---  
--- A REAPER implementation of Pro Tools’ Back and Play feature.
--- This package includes the main Back and Play action, plus a companion settings script
--- for configuring the rewind amount.
+--  # Back and Play
+--   
+--  A REAPER implementation of Pro Tools’ Back and Play feature.
+--  This package includes the main Back and Play action, plus a companion settings script
+--  for configuring the rewind amount.
 local function Msg(param)
     reaper.ShowConsoleMsg(tostring(param).."\n")
   end

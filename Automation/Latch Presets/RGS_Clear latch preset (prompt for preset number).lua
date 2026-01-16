@@ -7,7 +7,6 @@
 --    [main] RGS_Load latch preset for selected tracks (prompt for preset number).lua
 --    [main] RGS_Save latch preset for all tracks (prompt for preset number).lua
 --    [main] RGS_Save latch preset for selected tracks (prompt for preset number).lua
-
 -- @about 
 --  # Save/Load/Clear latch presets with prompt for preset number
 --

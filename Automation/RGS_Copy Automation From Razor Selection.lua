@@ -8,15 +8,16 @@
 -- @about 
 --  # Cut/Copy/Delete Automation From Razor Selection
 --  
---  This is a set of actions for cutting, copying, and deleting all track automation
---  data within a razor selection. It is meant to mimic the "Cut/Copy/Clear Special
---  All Automation" command from Pro Tools.
+--  This is a set of actions for cutting, copying, and deleting.track automation using
+--  razor selections. These actions are designed to replicate Pro Tools’ 
+--  “Cut/Copy/Clear Special – All Automation” commands inside REAPER.
 --  
---  When used with a Razor selection that contains both automation envelopes and
---  items these actions will ignore the items and cut, copy ,or only the automation
---  data, even if the envelopes are displayed in the media lane and not in their own 
---  dedicated lanes.  Automation data that has been cut or copied can then be pasted
---  using reapers native paste functionality
+--  When a Razor selection contains both media items and automation, media items are
+--  ignored entirely. Only automation data within the Razor area is cut, copied, or cleared, 
+--  even if envelopes are hidden, or shown in the media lane.
+
+--  Automation that is cut or copied can then be pasted using REAPER’s native Paste action, 
+--  integrating seamlessly into existing workflows.
 --------------------------Debug & Testing -----------------------------------
 local function Msg(param)
   reaper.ShowConsoleMsg(tostring(param).."\n")

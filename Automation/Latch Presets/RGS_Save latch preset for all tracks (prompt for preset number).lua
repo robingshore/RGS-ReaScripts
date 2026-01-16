@@ -1,4 +1,3 @@
-
 -- @noindex
 
 local show_debug_messages = false

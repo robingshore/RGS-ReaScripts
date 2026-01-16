@@ -1,4 +1,4 @@
---@ noindex
+--@noindex
 local ScriptName = "Back and Play Settings"
 local function TestVersion(version,version_min)
   local i = 0

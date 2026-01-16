@@ -1,7 +1,7 @@
 -- @description Back and Play
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0
+-- @version 1.0.1
 -- @provides
 --    [main] RGS_Back and Play Settings.lua
 -- @about 

@@ -1,7 +1,9 @@
 -- @description Save current envelope values to latch preset
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0.5
+-- @version 1.0.6
+-- @provides
+--    [main] RGS_Save current envelope values of selected tracks to latch preset*.lua
 -- @about 
 --  # Save current envelope values to latch preset
 --  

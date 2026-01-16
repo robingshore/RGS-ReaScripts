@@ -1,7 +1,7 @@
 -- @description Save/Load/Clear latch presets with prompt for preset number
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0.1
+-- @version 1.0.2
 -- @provides
 --    [main] RGS_Load latch preset for all tracks (prompt for preset number).lua
 --    [main] RGS_Load latch preset for selected tracks (prompt for preset number).lua
@@ -15,6 +15,7 @@
 --  latch presets. The actions prompt for a preset number, allowing you to
 --  save, load, or clear any latch preset without relying on 64 separae actions
 --  per function.
+
 
 local show_debug_messages = false
 local function Msg(param)

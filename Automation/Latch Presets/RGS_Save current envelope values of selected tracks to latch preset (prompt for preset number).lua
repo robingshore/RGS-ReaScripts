@@ -2,7 +2,7 @@
 -- @description Save current envelope values to latch preset
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0.2
+-- @version 1.0.3
 -- @provides
 --    [main] RGS_Save current envelope values*
 -- @about 

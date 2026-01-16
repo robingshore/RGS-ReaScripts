@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="RGS ReaScripts" commit="1193c74a96bfe376c1014224ee832e3e564024ef">
+<index version="1" name="RGS ReaScripts" commit="49f8ba3060faa1e35102239e2c9156ecf1241fee">
   <category name="Automation">
     <reapack name="RGS_Copy Automation From Razor Selection.lua" type="script" desc="Cut/Copy/Delete Automation From Razor Selection">
       <metadata>
@@ -8,8 +8,8 @@
 \widowctrl\hyphauto
 
 {\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 Cut/Copy/Delete Automation From Razor Selection\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 This is a set of actions for cutting, copying, and deleting all track automation data within a razor selection. It is meant to mimic the "Cut/Copy/Clear Special All Automation" command from Pro Tools.\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 When used with a Razor selection that contains both automation envelopes and items these actions will ignore the items and cut, copy ,or only the automation data, even if the envelopes are displayed in the media lane and not in their own dedicated lanes. Automation data that has been cut or copied can then be pasted using reapers native paste functionality\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This is a set of actions for cutting, copying, and deleting.track automation using razor selections. These actions are designed to replicate Pro Tools\u8217' \u8220"Cut/Copy/Clear Special \u8211- All Automation\u8221" commands inside REAPER.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 When a Razor selection contains both media items and automation, media items are ignored entirely. Only automation data within the Razor area is cut, copied, or cleared, even if envelopes are hidden, or shown in the media lane.\par}
 }
 ]]></description>
         <link rel="donation">https://paypal.me/robingshore</link>
@@ -32,7 +32,7 @@
 \widowctrl\hyphauto
 
 {\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 Toggle Visibility of Send Envelopes on Selected Tracks\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 This is a set scripts for showing/hiding send envelopes on selected tracks. it includes separate actiongs for send volume, send pan and send mute envelopes\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This is a set scripts for showing/hiding send envelopes on selected tracks. It includes separate actions for send volume, send pan and send mute envelopes\par}
 }
 ]]></description>
         <link rel="donation">https://paypal.me/robingshore</link>
@@ -50,6 +50,14 @@
   <category name="Automation/Latch Presets">
     <reapack name="RGS_Clear latch preset (prompt for preset number).lua" type="script" desc="Save/Load/Clear latch presets with prompt for preset number">
       <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 Save/Load/Clear latch presets with prompt for preset number\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This is a set of actions meant to streamline working with REAPER's 64 latch presets. The actions prompt for a preset number, allowing you to save, load, or clear any latch preset without relying on 64 separae actions per function.\par}
+}
+]]></description>
         <link rel="donation">https://paypal.me/robingshore</link>
       </metadata>
       <version name="1.0.1" author="Robin Shore" time="2026-01-15T18:42:05Z">
@@ -956,7 +964,8 @@
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
 \widowctrl\hyphauto
 
-{\pard \ql \f0 \sa180 \li0 \fi0 #Back and Play\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 Back and Play\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 A REAPER implementation of Pro Tools\u8217' Back and Play feature. This package includes the main Back and Play action, plus a companion settings script for configuring the rewind amount.\par}
 }
 ]]></description>
         <link rel="donation">https://paypal.me/robingshore</link>
@@ -968,6 +977,10 @@
       <version name="1.0.1" author="Robin Shore" time="2026-01-16T15:08:34Z">
         <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/1193c74a96bfe376c1014224ee832e3e564024ef/Transport/RGS_Back%20and%20Play.lua</source>
         <source main="main" file="RGS_Back and Play Settings.lua">https://github.com/robingshore/RGS-ReaScripts/raw/1193c74a96bfe376c1014224ee832e3e564024ef/Transport/RGS_Back%20and%20Play%20Settings.lua</source>
+      </version>
+      <version name="1.0.2" author="Robin Shore" time="2026-01-16T15:51:48Z">
+        <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/49f8ba3060faa1e35102239e2c9156ecf1241fee/Transport/RGS_Back%20and%20Play.lua</source>
+        <source main="main" file="RGS_Back and Play Settings.lua">https://github.com/robingshore/RGS-ReaScripts/raw/49f8ba3060faa1e35102239e2c9156ecf1241fee/Transport/RGS_Back%20and%20Play%20Settings.lua</source>
       </version>
     </reapack>
   </category>

@@ -2,7 +2,7 @@
 -- @description Save current envelope values to latch preset
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0.1
+-- @version 1.0.2
 -- @provides
 --    [main] RGS_Save current envelope values*
 -- @about 
@@ -15,6 +15,7 @@
 --  Once saved, these values can be instantly punched into other sections of the project using REAPER’s
 --  built-in Load Latch Preset actions. The package includes one-click save actions for all 64 latch slots,
 --  as well as a generalized action that prompts the user to choose a slot before saving.
+
 
 local show_debug_messages = false
 

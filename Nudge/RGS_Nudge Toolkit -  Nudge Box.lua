@@ -1,7 +1,7 @@
 -- @description Nudge Toolkit
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.1.0
+-- @version 1.1.1
 -- @screenshot https://i.ibb.co/LzWpMDRt/Nudge-Box-screenshot.gif
 -- @provides
 --    [main] *.lua
@@ -1544,19 +1544,17 @@ local function loop()
             ImGui.Separator(ctx)
             do
                 local snap_string = "Snap to " .. nudge_units[selected_nudge_unit].snap_unit
-                if nudge_units[selected_nudge_unit].unit ~= "Sample" then
-                    if ImGui.MenuItem(ctx, snap_string, "", ToBoolean(snap_to_unit)) then
-                        if snap_to_unit then
-                            reaper.SetToggleCommandState(0, snap_to_unit_id, 0)
-                            reaper.RefreshToolbar2(0, snap_to_unit_id)
-                        else
-                            reaper.SetToggleCommandState(0, snap_to_unit_id, 1)
-                            reaper.RefreshToolbar2(0, snap_to_unit_id)
-                        end
-
-                        snap_to_unit = not snap_to_unit
-                        reaper.SetExtState("RGS_Nudge", "snap_to_unit", tostring(snap_to_unit), true)
+                if ImGui.MenuItem(ctx, snap_string, "", ToBoolean(snap_to_unit)) then
+                    if snap_to_unit then
+                        reaper.SetToggleCommandState(0, snap_to_unit_id, 0)
+                        reaper.RefreshToolbar2(0, snap_to_unit_id)
+                    else
+                        reaper.SetToggleCommandState(0, snap_to_unit_id, 1)
+                        reaper.RefreshToolbar2(0, snap_to_unit_id)
                     end
+
+                    snap_to_unit = not snap_to_unit
+                    reaper.SetExtState("RGS_Nudge", "snap_to_unit", tostring(snap_to_unit), true)
                 end
             end
             if ImGui.MenuItem(ctx, "Nudge cursor with razor edits", "", ToBoolean(nudge_cursor_with_razors)) then

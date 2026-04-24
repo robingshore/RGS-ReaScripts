@@ -1,7 +1,7 @@
 -- @description Nudge Toolkit
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.1.2
+-- @version 1.1.3
 -- @screenshot https://i.ibb.co/LzWpMDRt/Nudge-Box-screenshot.gif
 -- @provides
 --    [main] *.lua
@@ -35,10 +35,13 @@
 --  
 --  - Fully respects REAPER’s ripple editing, trim behind, and snap settings.
 -- @changelog
---  Updated contextual nudge script names to be more descriptive    
+--  - Fixed bug when nudging fade ins or snap offsets and nudge unit is set to measures.beats
+--  - Leave items unselected when nudging items with razor edits
+--  - Support Nudging by grid unit
+--  - Action to cycle through nudge units sets toggle states for nudge unit actions
 
 local ScriptName = "Nudge Box"
-local ScriptVersion = "1.1.0"
+local ScriptVersion = "1.1.3"
 
 local debug = false
 local profiler
@@ -443,6 +446,21 @@ local unit_table_twohundredfiftysixth_notes = {
     action_id = "_RSbd82fa4c8e299b1b9b67a79d5b386704d21bbabd"
 }
 table.insert(nudge_units, unit_table_twohundredfiftysixth_notes)
+
+local unit_table_grid = {
+    unit = "Grid Unit",
+    format =  "%.3f",
+    speed = 1,
+    min = 0,
+    selected = false,
+    presets = nil,
+    ruler = -1,
+    snap_unit = "Grid",
+    unit_number = 2,
+    is_note = false,
+    action_id = "_RS6cd85ab55e179d9e155c98d26eeb4b7211529b13"
+}
+table.insert(nudge_units, unit_table_grid)
 for i = 1, #nudge_units do
     if i == selected_nudge_unit then
         nudge_units[i].selected = true
@@ -1313,10 +1331,10 @@ local function loop()
         else
             nudge_value = tonumber(reaper.GetExtState("RGS_Nudge", "unit_" .. tostring(selected_nudge_unit) .. "_nudge_value"))
             if not nudge_value then 
-                if nudge_units[selected_nudge_unit].is_note then
-                    nudge_value = 1
-                else
+                if nudge_units[selected_nudge_unit].presets then
                     nudge_value = nudge_units[selected_nudge_unit].presets[1].value
+                else
+                    nudge_value = 1
                 end
             end
         end

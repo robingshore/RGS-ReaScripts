@@ -22,7 +22,8 @@ local command_ids = {
     "_RS8b1f863c4cb0b6884f6ac9afebe862ef7478790c",
     "_RSdf91ccd381825e3f96794bab03165f05d2630a6c",
     "_RSbd82fa4c8e299b1b9b67a79d5b386704d21bbabd",
-    "_RS6f744f0eb06777db3feaba50bcc49bbce161348d"
+    "_RS6f744f0eb06777db3feaba50bcc49bbce161348d",
+    "_RS6cd85ab55e179d9e155c98d26eeb4b7211529b13",
 }
 local nudge_unit = 7
 local unit_number = 15

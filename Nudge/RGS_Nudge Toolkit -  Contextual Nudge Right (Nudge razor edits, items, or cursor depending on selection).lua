@@ -981,6 +981,7 @@ local function Main()
         end
         LoadTrackSelection(selected_tracks)
         reaper.SetCursorContext(2, selected_envelope)
+        UnselectAllItems()
     end
     
 

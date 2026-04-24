@@ -1122,6 +1122,7 @@ local function Main()
                reaper.GetSet_LoopTimeRange(true, false, time_start - nudge, time_end - nudge, false)
             end
         end
+        UnselectAllItems()
         LoadTrackSelection(selected_tracks)
         reaper.SetCursorContext(2, selected_envelope)
     end

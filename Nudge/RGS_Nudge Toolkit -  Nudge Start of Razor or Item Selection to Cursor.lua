@@ -998,6 +998,7 @@ local function Main()
             end
         end
         reaper.SetCursorContext(2,selected_envelope )
+        UnselectAllItems()
     end
 
     if not RazorExists() and reaper.CountSelectedMediaItems(0) > 0 then

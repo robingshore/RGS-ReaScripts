@@ -25,8 +25,8 @@ local command_ids = {
     "_RS6f744f0eb06777db3feaba50bcc49bbce161348d",
     "_RS6cd85ab55e179d9e155c98d26eeb4b7211529b13",
 }
-local nudge_unit = 13
-local unit_number = 9
+local nudge_unit = 20
+local unit_number = 2
 
 if nudge_unit ~= tonumber(reaper.GetExtState("RGS_Nudge", "selected_nudge_unit")) then
     for i = 1, #command_ids do

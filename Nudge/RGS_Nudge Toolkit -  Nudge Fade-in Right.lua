@@ -1,6 +1,30 @@
 -- @noindex
-
-
+local nudge_unit
+local nudge_amount
+local snap = reaper.GetExtState("RGS_Nudge", "snap_to_unit")
+if snap == "true" then
+    snap = 2 
+else
+    snap = 0
+end
+if not reaper.HasExtState("RGS_Nudge","nudge_unit_number") then
+    nudge_unit = 2 --  0=ms, 1=seconds, 2=grid, 3=256th notes, ..., 15=whole notes, 16=measures.beats (1.15 = 1 measure + 1.5 beats), 17=samples, 18=frames, 19=pixels, 20=item lengths, 21=item selections
+else
+    nudge_unit = tonumber(reaper.GetExtState("RGS_Nudge","nudge_unit_number"))
+end
+if not reaper.HasExtState("RGS_Nudge","nudge_value") then
+    if nudge_unit == 16 then
+        nudge_amount = "0.1.0"
+    else
+        nudge_amount = 1
+    end
+else
+    if nudge_unit == 16 then
+        nudge_amount = reaper.GetExtState("RGS_Nudge","nudge_value")
+    else
+        nudge_amount = tonumber(reaper.GetExtState("RGS_Nudge","nudge_value"))
+    end
+end
 
 local function Msg(param)
     reaper.ShowConsoleMsg(tostring(param).."\n")
@@ -93,25 +117,6 @@ local function ApplyNudgeRGS(project, nudgeflag, nudgewhat, nudgeunits, value, r
     else
         reaper.ApplyNudge(project, nudgeflag, nudgewhat, nudgeunits, value, reverse, copies)
     end
-end
-----------------------------------------
-local nudge_unit
-local nudge_amount
-local snap = reaper.GetExtState("RGS_Nudge", "snap_to_unit")
-if snap == "true" then
-    snap = 2 
-else
-    snap = 0
-end
-if not reaper.HasExtState("RGS_Nudge","nudge_unit_number") then
-    nudge_unit = 2 --  0=ms, 1=seconds, 2=grid, 3=256th notes, ..., 15=whole notes, 16=measures.beats (1.15 = 1 measure + 1.5 beats), 17=samples, 18=frames, 19=pixels, 20=item lengths, 21=item selections
-else
-    nudge_unit = tonumber(reaper.GetExtState("RGS_Nudge","nudge_unit_number"))
-end
-if not reaper.HasExtState("RGS_Nudge","nudge_value") then
-    nudge_amount = 1
-else
-    nudge_amount = tonumber(reaper.GetExtState("RGS_Nudge","nudge_value"))
 end
 -----------------Main----------------------------
 

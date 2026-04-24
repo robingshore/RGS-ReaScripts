@@ -158,6 +158,13 @@ local unit_table_twohundredfiftysixth_notes = {
 }
 table.insert(nudge_units, unit_table_twohundredfiftysixth_notes)
 
+local unit_table_grid = {
+    ruler = -1,
+    unit_number = 2,
+    action_id = "_RS6cd85ab55e179d9e155c98d26eeb4b7211529b13"
+}
+table.insert(nudge_units, unit_table_grid)
+
 local nudge_unit
 local unit_number
 local ruler_unit = GetPrimaryRulerTimeMode()
@@ -181,8 +188,13 @@ reaper.SetExtState("RGS_Nudge", "follow_ruler", "true", true)
 --reaper.SetExtState("RGS_Nudge", "ruler_switched", "true",true)
 
 if reaper.HasExtState("RGS_Nudge", "unit_" .. tostring(nudge_unit) .. "_nudge_value") then
-    local nudge_amount = tonumber(reaper.GetExtState("RGS_Nudge", "unit_" .. tostring(nudge_unit) .. "_nudge_value"))
-    reaper.SetExtState("RGS_Nudge", "nudge_value", string.format("%.17f", nudge_amount), true)
+    if unit_number == 16 then
+        local nudge_amount = reaper.GetExtState("RGS_Nudge", "unit_" .. tostring(nudge_unit) .. "_nudge_value")
+        reaper.SetExtState("RGS_Nudge", "nudge_value", nudge_amount, true)
+    else
+        local nudge_amount = tonumber(reaper.GetExtState("RGS_Nudge", "unit_" .. tostring(nudge_unit) .. "_nudge_value"))
+        reaper.SetExtState("RGS_Nudge", "nudge_value", string.format("%.17f", nudge_amount), true)
+    end
 end
 
 local string = "{"

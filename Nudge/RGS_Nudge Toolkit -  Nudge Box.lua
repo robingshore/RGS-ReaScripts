@@ -1,7 +1,7 @@
 -- @description Nudge Toolkit
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.1.3
+-- @version 1.1.4
 -- @screenshot https://i.ibb.co/LzWpMDRt/Nudge-Box-screenshot.gif
 -- @provides
 --    [main] *.lua
@@ -35,13 +35,11 @@
 --  
 --  - Fully respects REAPER’s ripple editing, trim behind, and snap settings.
 -- @changelog
---  - Fixed bug when nudging fade ins or snap offsets and nudge unit is set to measures.beats
---  - Leave items unselected when nudging items with razor edits
---  - Support Nudging by grid unit
---  - Action to cycle through nudge units sets toggle states for nudge unit actions
+--  - Fixed Nudge Box crash when switching to grid mode for the first time
+--  - Improved behavior of action to cycle through nudge units
 
 local ScriptName = "Nudge Box"
-local ScriptVersion = "1.1.3"
+local ScriptVersion = "1.1.4"
 
 local debug = false
 local profiler
@@ -1301,7 +1299,7 @@ local function loop()
     local snap_to_unit = ToBoolean(reaper.GetExtState("RGS_Nudge", "snap_to_unit"))
     local follow_ruler = ToBoolean(reaper.GetExtState("RGS_Nudge", "follow_ruler"))
     if not reaper.HasExtState("RGS_Nudge", "nudge_value") then
-        if not nudge_units[selected_nudge_unit].is_note then
+        if nudge_units[selected_nudge_unit].presets then
             nudge_value = nudge_units[selected_nudge_unit].presets[1].value
         else
             nudge_value = 1
@@ -1398,7 +1396,7 @@ local function loop()
                 selected_nudge_unit = i
                 reaper.SetExtState("RGS_Nudge", "selected_nudge_unit", tostring(selected_nudge_unit), true)                
                 if not reaper.HasExtState("RGS_Nudge", "unit_" .. tostring(selected_nudge_unit) .. "_nudge_value") then
-                    if not nudge_units[selected_nudge_unit].is_note then
+                    if nudge_units[selected_nudge_unit].presets then
                         nudge_value = nudge_units[selected_nudge_unit].presets[1].value
                     else
                         nudge_value = 1
@@ -1509,7 +1507,7 @@ local function loop()
                         follow_ruler = false
                         reaper.SetExtState("RGS_Nudge", "follow_ruler", tostring(follow_ruler), true)
                         if not reaper.HasExtState("RGS_Nudge","unit_" .. tostring(selected_nudge_unit) .. "_nudge_value") then
-                            if not nudge_units[selected_nudge_unit].is_note then
+                            if nudge_units[selected_nudge_unit].presets then
                                 nudge_value = nudge_units[selected_nudge_unit].presets[1].value
                             else
                                 nudge_value = 1

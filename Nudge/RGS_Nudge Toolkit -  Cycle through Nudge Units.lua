@@ -156,44 +156,9 @@ if reaper.HasExtState("RGS_Nudge","selected_nudge_unit") then
     else
         nudge_unit = 1
     end
-
-    for i = 1, #nudge_units do
-        local command_id = reaper.NamedCommandLookup(nudge_units[i].action_id)
-        reaper.SetToggleCommandState(0, command_id, 0)
-        reaper.RefreshToolbar2(0, command_id)
-    end
-    reaper.SetToggleCommandState(0, ruler_command_id, 0)
-    reaper.RefreshToolbar2(0, ruler_command_id)
-    
     local command_id = reaper.NamedCommandLookup(nudge_units[nudge_unit].action_id)
-    reaper.SetToggleCommandState(0, command_id, 1)
-    reaper.RefreshToolbar2(0, command_id)
-
-    if reaper.HasExtState("RGS_Nudge","unit_"..tostring(nudge_unit).."_nudge_value") then 
-        local nudge_amount = tonumber(reaper.GetExtState("RGS_Nudge","unit_"..tostring(nudge_unit).."_nudge_value"))
-        if not nudge_amount then
-            nudge_amount = reaper.GetExtState("RGS_Nudge","unit_"..tostring(nudge_unit).."_nudge_value")
-            reaper.SetExtState("RGS_Nudge","nudge_value",nudge_amount,true)
-        else
-            reaper.SetExtState("RGS_Nudge","nudge_value",string.format("%.17f", nudge_amount),true)
-        end
-    end
-    reaper.SetExtState("RGS_Nudge","selected_nudge_unit", tostring(nudge_unit),true)
-    reaper.SetExtState("RGS_Nudge", "follow_ruler", "false",true)
+    reaper.Main_OnCommand(command_id, 0)
 else
-    reaper.SetExtState("RGS_Nudge","selected_nudge_unit", tostring(1),true)
-    reaper.SetExtState("RGS_Nudge", "follow_ruler", "false",true)
-    
-    for i = 1, #nudge_units do
-        local command_id = reaper.NamedCommandLookup(nudge_units[i].action_id)
-        reaper.SetToggleCommandState(0, command_id, 0)
-        reaper.RefreshToolbar2(0, command_id)
-    end
-
-    reaper.SetToggleCommandState(0, ruler_command_id, 0)
-    reaper.RefreshToolbar2(0, ruler_command_id)
-
     local command_id = reaper.NamedCommandLookup(nudge_units[1].action_id)
-    reaper.SetToggleCommandState(0, command_id, 1)
-    reaper.RefreshToolbar2(0, command_id)
+    reaper.Main_OnCommand(command_id, 0)
 end

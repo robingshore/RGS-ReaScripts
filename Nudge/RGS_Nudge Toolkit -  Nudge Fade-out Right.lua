@@ -91,7 +91,12 @@ local function TrimFadeOut(nudge)
         local item = reaper.GetSelectedMediaItem(0,i)
         local fadeout_length = reaper.GetMediaItemInfo_Value(item, "D_FADEOUTLEN")
         reaper.SetMediaItemInfo_Value(item,"D_FADEOUTLEN", fadeout_length - nudge)
+        local new_fadeout_length = reaper.GetMediaItemInfo_Value(item, "D_FADEOUTLEN")
+        if new_fadeout_length < 0 then
+            reaper.SetMediaItemInfo_Value(item,"D_FADEOUTLEN", 0)
+        end
     end
+
 end
 
 local function ApplyNudgeRGS(project, nudgeflag, nudgewhat, nudgeunits, value, reverse, copies)
@@ -136,9 +141,9 @@ local function Main()
         local nudge = reaper.GetCursorPosition()- first_fadeout_start
         reaper.SetEditCurPos(initial_cur_pos, false, false)
 
-        if nudge < shortest_fadeout then
+        --if nudge < shortest_fadeout then
             TrimFadeOut(nudge)
-        end
+        --end
     end
 end
 

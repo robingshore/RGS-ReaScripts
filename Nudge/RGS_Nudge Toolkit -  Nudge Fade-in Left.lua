@@ -83,6 +83,10 @@ local function TrimFadeins(nudge)
         local item = reaper.GetSelectedMediaItem(0,i)
         fadein_length = reaper.GetMediaItemInfo_Value(item, "D_FADEINLEN")
         reaper.SetMediaItemInfo_Value(item,"D_FADEINLEN", fadein_length + nudge)
+        local new_fadein_length = reaper.GetMediaItemInfo_Value(item, "D_FADEINLEN")
+        if new_fadein_length < 0 then
+            reaper.SetMediaItemInfo_Value(item,"D_FADEINLEN", 0)
+        end
     end
 end
 
@@ -128,9 +132,9 @@ local function Main()
         local nudge = first_fadein_end - reaper.GetCursorPosition()
         reaper.SetEditCurPos(initial_cur_pos, false, false)
 
-        if nudge < shortest_fadein then
+        --if nudge < shortest_fadein then
             TrimFadeins(-nudge)
-        end
+        --end
     end
 end
 

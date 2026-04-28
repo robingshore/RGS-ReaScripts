@@ -1,7 +1,7 @@
 -- @description Nudge Toolkit
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.1.4
+-- @version 1.1.5
 -- @screenshot https://i.ibb.co/LzWpMDRt/Nudge-Box-screenshot.gif
 -- @provides
 --    [main] *.lua
@@ -35,11 +35,10 @@
 --  
 --  - Fully respects REAPER’s ripple editing, trim behind, and snap settings.
 -- @changelog
---  - Fixed Nudge Box crash when switching to grid mode for the first time
---  - Improved behavior of action to cycle through nudge units
+--  - Allow fades to be removed by nudging them past the edge of the item 
 
 local ScriptName = "Nudge Box"
-local ScriptVersion = "1.1.4"
+local ScriptVersion = "1.1.5"
 
 local debug = false
 local profiler

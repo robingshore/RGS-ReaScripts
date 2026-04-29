@@ -1,7 +1,7 @@
 -- @description Nudge Toolkit
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.1.5
+-- @version 1.2.0
 -- @screenshot https://i.ibb.co/LzWpMDRt/Nudge-Box-screenshot.gif
 -- @provides
 --    [main] *.lua
@@ -35,10 +35,11 @@
 --  
 --  - Fully respects REAPER’s ripple editing, trim behind, and snap settings.
 -- @changelog
---  - Allow fades to be removed by nudging them past the edge of the item 
+--  - Add actions for nudging markers and regions
+--  - Add toggleable option to include markers and regions when using contextual nudge
 
 local ScriptName = "Nudge Box"
-local ScriptVersion = "1.1.5"
+local ScriptVersion = "1.2.0"
 
 local debug = false
 local profiler
@@ -569,6 +570,7 @@ local minutes_seconds_activated
 local tc_activated
 
 
+local include_markers_id = reaper.NamedCommandLookup("_RSd9c590ae665563242c3116c8c52e042966496ed9")
 local nudge_cursor_with_razors_id = reaper.NamedCommandLookup("_RSc8220f9335ba4d60493c3be0c03c04d3b2f53bfe")
 local nudge_razor_contents_envelopes_id = reaper.NamedCommandLookup("_RS1cb9fc67e73cda9bb5ba105a2c909af60be3971f")
 local nudge_razor_contents_items_id = reaper.NamedCommandLookup("_RS4196752bb5ed47556e1472ffe96d94528c0271c1")
@@ -1291,6 +1293,7 @@ end
 
 local function loop()
     local focused_window, section_id = GetLastFocusedWindow()
+    local include_markers = ToBoolean(reaper.GetExtState("RGS_Nudge", "include_markers"))
     local nudge_cursor_with_razors = ToBoolean(reaper.GetExtState("RGS_Nudge", "nudge_cursor_with_razors"))
     local nudge_time_sel_with_razors = ToBoolean(reaper.GetExtState("RGS_Nudge", "nudge_time_sel_with_razors"))
     local nudge_razor_contents_items = ToBoolean(reaper.GetExtState("RGS_Nudge", "nudge_razor_contents_items"))
@@ -1619,6 +1622,18 @@ local function loop()
                 nudge_razor_contents_envelopes = not nudge_razor_contents_envelopes
                 reaper.SetExtState("RGS_Nudge", "nudge_razor_contents_envelopes", tostring(nudge_razor_contents_envelopes), true)
             end
+
+            if ImGui.MenuItem(ctx, "Contextual Nudge includes selected markers & regions", "", ToBoolean(include_markers)) then
+                if include_markers then
+                    reaper.SetToggleCommandState(0, include_markers_id, 0)
+                    reaper.RefreshToolbar2(0, include_markers_id)
+                else
+                    reaper.SetToggleCommandState(0, include_markers_id, 1)
+                    reaper.RefreshToolbar2(0, include_markers_id)
+                end
+                include_markers = not include_markers
+                reaper.SetExtState("RGS_Nudge", "include_markers", tostring(include_markers), true)
+            end            
 
             ImGui.Separator(ctx)
             if ImGui.MenuItem(ctx, "Settings") then

@@ -56,53 +56,54 @@ local function RazorExistsOnSelectedTracks()
     return false
 end
 
-local function SetTrackRazorEdit(track, areaStart, areaEnd, clearSelection)
+local function SetTrackRazorEdit(track, areaStart, areaEnd, clearSelection, areaTop, areaBottom)
     if clearSelection == nil then clearSelection = false end
+        
     
     if clearSelection then
-        local ret, area = reaper.GetSetMediaTrackInfo_String(track, 'P_RAZOREDITS', '', false)
+        local ret, area = reaper.GetSetMediaTrackInfo_String(track, 'P_RAZOREDITS_EXT', '', false)
     
         --parse string, all this string stuff could probably be written better
-        local str = {}
-        for j in string.gmatch(area, "%S+") do
-            table.insert(str, j)
+        local TRstr = {}
+            
+        for s in area:gmatch('[^,]+')do
+          table.insert(TRstr, s)
+        end
+        
+        for i=1, #TRstr do
+        
+          local rect = TRstr[i]
+          TRstr[i] = {}
+          for j in rect:gmatch("%S+") do
+            table.insert(TRstr[i], j)
+          end
+          
         end
         
         --strip existing selections across the track
-        local j = 1
-        while j <= #str do
-            local GUID = str[j+2]
-            if GUID == '""' then 
-                str[j] = ''
-                str[j+1] = ''
-                str[j+2] = ''
-            end
-
-            j = j + 3
-        end
-
-        --insert razor edit 
-        local REstr = tostring(areaStart) .. ' ' .. tostring(areaEnd) .. ' ""'
-        table.insert(str, REstr)
-
         local finalStr = ''
-        for i = 1, #str do
-            local space = i == 1 and '' or ' '
-            finalStr = finalStr .. space .. str[i]
+        for i = 1, #TRstr do
+            if #TRstr[i] > 2 and TRstr[i][3] ~= '""' then
+              finalStr = finalStr..TRstr[i][1]..' '..TRstr[i][2]..' '..TRstr[i][3]..','
+            end
         end
-
-        local ret, area = reaper.GetSetMediaTrackInfo_String(track, 'P_RAZOREDITS', finalStr, true)
+        --insert razor edit 
+        local REstr = tostring(areaStart) .. ' ' .. tostring(areaEnd) .. ' ""'..tostring(areaTop)..' '..tostring(areaBottom)
+        finalStr = finalStr..REstr
+        local ret, area = reaper.GetSetMediaTrackInfo_String(track, 'P_RAZOREDITS_EXT', finalStr, true)
         return ret
-    else         
-        local ret, area = reaper.GetSetMediaTrackInfo_String(track, 'P_RAZOREDITS', '', false)
-        local str = area ~= nil and area .. ' ' or ''
-        str = str .. tostring(areaStart) .. ' ' .. tostring(areaEnd) .. '  ""'
-        
-        local ret, area = reaper.GetSetMediaTrackInfo_String(track, 'P_RAZOREDITS', str, true)
+    else
+           
+        local ret, area = reaper.GetSetMediaTrackInfo_String(track, 'P_RAZOREDITS_EXT', '', false)
+        local str = area ~= '' and area .. ',' or ''
+        str = str .. tostring(areaStart) .. ' ' .. tostring(areaEnd)
+        if areaTop then
+            str = str .. ' "" '..areaTop..' '.. areaBottom
+        end
+        local ret, area = reaper.GetSetMediaTrackInfo_String(track, 'P_RAZOREDITS_EXT', str, true)
         return ret
     end
 end
-
 local function SetEnvelopeRazorEdit(envelope, areaStart, areaEnd, clearSelection, GUID)
     local GUID = GUID == nil and GetGUIDFromEnvelope(envelope) or GUID
     local track = reaper.Envelope_GetParentTrack(envelope)
@@ -860,9 +861,9 @@ local function Main()
             else
                 --------------------Nudge Razor Track Areas
                 if not nudge_reverse then
-                    SetTrackRazorEdit(razor_data.track, razor_data.areaStart + nudge, razor_data.areaEnd + nudge, false)
+                    SetTrackRazorEdit(razor_data.track, razor_data.areaStart + nudge, razor_data.areaEnd + nudge, false, razor_data.areaTop, razor_data.areaBottom)
                 else
-                    SetTrackRazorEdit(razor_data.track, razor_data.areaStart - nudge, razor_data.areaEnd - nudge, false)
+                    SetTrackRazorEdit(razor_data.track, razor_data.areaStart - nudge, razor_data.areaEnd - nudge, false, razor_data.areaTop, razor_data.areaBottom)
                 end
 
                 if nudge_razor_contents_items then

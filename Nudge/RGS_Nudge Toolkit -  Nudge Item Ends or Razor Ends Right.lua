@@ -389,7 +389,7 @@ local function SetTrackRazorEdit(track, areaStart, areaEnd, clearSelection, area
         local str = area ~= '' and area .. ',' or ''
         str = str .. tostring(areaStart) .. ' ' .. tostring(areaEnd)
         if areaTop then
-            str = str .. ' "" '..areaTop..areaBottom
+            str = str .. ' "" '..areaTop..' '.. areaBottom
         end
         local ret, area = reaper.GetSetMediaTrackInfo_String(track, 'P_RAZOREDITS_EXT', str, true)
         return ret

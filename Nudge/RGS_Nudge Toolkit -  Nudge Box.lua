@@ -1,7 +1,7 @@
 -- @description Nudge Toolkit
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.2.3
+-- @version 1.2.4
 -- @screenshot https://i.ibb.co/LzWpMDRt/Nudge-Box-screenshot.gif
 -- @provides
 --    [main] *.lua
@@ -35,11 +35,12 @@
 --  
 --  - Fully respects REAPER’s ripple editing, trim behind, and snap settings.
 -- @changelog
---  - Fixed bug when nudging razor edits on fixed lane tracks
+--  - Updated ImGui Version
+--  - Update Font loading code 
 --  
 
 local ScriptName = "Nudge Box"
-local ScriptVersion = "1.2.3"
+local ScriptVersion = "1.2.4"
 
 local debug = false
 local profiler
@@ -77,13 +78,13 @@ if not reaper.ImGui_GetBuiltinPath then
     no_imgui = true
 else    
     local _,_,imgui_version = reaper.ImGui_GetVersion()
-    if not TestVersion(imgui_version,{0,10,0,2}) then
+    if not TestVersion(imgui_version,{0,10,0,5}) then
         no_imgui = true
     end
 end
 
 if no_imgui then
-    missing_dependencies = "ReaImGui (version 0.10.0.2 or higher)\n"
+    missing_dependencies = "ReaImGui (version 0.10.0.5 or higher)\n"
 end
 
 if not reaper.JS_Window_GetTitle then
@@ -106,7 +107,7 @@ end
 
 
 package.path = reaper.ImGui_GetBuiltinPath() .. "/?.lua"
-local ImGui = require "imgui" "0.10.0.2"
+local ImGui = require "imgui" "0.10.0.5"
 local ctx = ImGui.CreateContext(ScriptName)
 ImGui.SetConfigVar(ctx, ImGui.ConfigVar_KeyRepeatDelay, .5)
 ImGui.SetConfigVar(ctx, ImGui.ConfigVar_KeyRepeatRate, .1)
@@ -652,6 +653,8 @@ for i = 1, #font_names do
     local bold_font = ImGui.CreateFont(font_names[i], ImGui.FontFlags_Bold)
     table.insert(fonts, font)
     table.insert(bold_fonts, bold_font)
+    ImGui.Attach(ctx, font)
+    ImGui.Attach(ctx, bold_font)
     local width = ImGui.CalcTextSize(ctx, font_names[i])
     local longest_width = ImGui.CalcTextSize(ctx, font_names[longest_font_name])
     if width > longest_width then
@@ -1346,13 +1349,6 @@ local function loop()
     end
 
     ImGui.SetNextWindowSize(ctx, gui_w, gui_h, ImGui.Cond_FirstUseEver)
-
-    for i = 1, #fonts do
-        ImGui.PushFont(ctx, fonts[i], main_font_size)
-        ImGui.PopFont(ctx)
-        ImGui.PushFont(ctx, bold_fonts[i], main_font_size)
-        ImGui.PopFont(ctx)
-    end
 
     if main_font_bold then
         ImGui.PushFont(ctx, bold_fonts[main_font], main_font_size)

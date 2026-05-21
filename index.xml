@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="RGS ReaScripts" commit="1244de676b0df5fe474a4604623f46ab2969d76c">
+<index version="1" name="RGS ReaScripts" commit="35f663c994dd0bbbd5c96702552871026ccc26d4">
   <category name="Automation/Latch Presets">
     <reapack name="RGS_Clear latch preset (prompt for preset number).lua" type="script" desc="Save/Load/Clear latch presets with prompt for preset number">
       <metadata>
@@ -1946,6 +1946,28 @@
     </reapack>
   </category>
   <category name="Utility">
+    <reapack name="RGS_ReaSync.lua" type="script" desc="ReaSync">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 ReaSync\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\b ReaSync} is a waveform matching tool for Reaper. ReaSync automatically repositions selected audio items by matching them against a reference track. Originally designed for syncing dialog recordings, it may be useful for aligning any audio captured simultaneously from multiple sources or for realigning source recordings to a final edit.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel1 \b \fs32 Features\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Adjustable match threshold to balance sensitivity vs. accuracy\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Match report with confidence scores for each item\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Option to move matched items to a new track\sa180\par}
+}
+]]></description>
+        <link rel="screenshot">https://i.ibb.co/sp1FjbSt/Screenshot-2026-05-20-at-16-05-40.png</link>
+        <link rel="donation">https://paypal.me/robingshore</link>
+      </metadata>
+      <version name="1.0.0" author="Robin Shore" time="2026-05-21T16:47:55Z">
+        <changelog><![CDATA[- Initial Release]]></changelog>
+        <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/35f663c994dd0bbbd5c96702552871026ccc26d4/Utility/RGS_ReaSync.lua</source>
+      </version>
+    </reapack>
     <reapack name="RGS_Show Selected Item Count in Help Display if items are selected.lua" type="script" desc="Show selected item count in help display if any items are selected">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}

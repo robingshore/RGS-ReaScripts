@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="RGS ReaScripts" commit="35f663c994dd0bbbd5c96702552871026ccc26d4">
+<index version="1" name="RGS ReaScripts" commit="4b3ccc64eeeefca1294dec315dbcc9c49aade9f1">
   <category name="Automation/Latch Presets">
     <reapack name="RGS_Clear latch preset (prompt for preset number).lua" type="script" desc="Save/Load/Clear latch presets with prompt for preset number">
       <metadata>
@@ -1966,6 +1966,13 @@
       <version name="1.0.0" author="Robin Shore" time="2026-05-21T16:47:55Z">
         <changelog><![CDATA[- Initial Release]]></changelog>
         <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/35f663c994dd0bbbd5c96702552871026ccc26d4/Utility/RGS_ReaSync.lua</source>
+      </version>
+      <version name="1.1.0" author="Robin Shore" time="2026-05-22T16:06:49Z">
+        <changelog><![CDATA[- Smoother progress bar animation
+- Show estimated time remaining while processing
+- Show name of currently processing item
+- Show Summary at bottom of report]]></changelog>
+        <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/4b3ccc64eeeefca1294dec315dbcc9c49aade9f1/Utility/RGS_ReaSync.lua</source>
       </version>
     </reapack>
     <reapack name="RGS_Show Selected Item Count in Help Display if items are selected.lua" type="script" desc="Show selected item count in help display if any items are selected">

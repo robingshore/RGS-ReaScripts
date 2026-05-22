@@ -1,7 +1,7 @@
 -- @description ReaSync
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0.0
+-- @version 1.1.0
 -- @screenshot https://i.ibb.co/sp1FjbSt/Screenshot-2026-05-20-at-16-05-40.png
 -- @about 
 --  # ReaSync
@@ -24,18 +24,26 @@
 --  - ReaSync is intended to get items in the right place, not to achieve phase 
 --  or sample-accurate alignment.
 -- @changelog
---  - Initial Release
--- 
+--  - Smoother progress bar animation
+--  - Show estimated time remaining while processing
+--  - Show name of currently processing item
+--  - Show Summary at bottom of report
+--
 --  
 
 local ScriptName = "ReaSync"
-local ScriptVersion = "1.0.0"
+local ScriptVersion = "1.1.0"
 
 local show_debug_messages = false
 local SR = 2000
 local MAX_TABLE_HEIGHT = 500
 local RAW_CONFIDENCE_SCALE_MAX = 8
-local WINDOWS_PER_FRAME = 2
+local ANALYSIS_MAX_SEC = 15
+local ANALYSIS_SCAN_STEP_SEC = 5
+local FRAME_BUDGET = 0.01
+
+
+
 
 local function TestVersion(version,version_min)
   local i = 0
@@ -101,6 +109,51 @@ local is_macos = reaper.GetOS():match("OS")
 local shortcut_cache = {}
 local shortcut_cache_checksum
 local kb_ini
+
+
+
+local processing_start_time
+local main_window_flags = ImGui.WindowFlags_AlwaysAutoResize | ImGui.WindowFlags_TopMost
+local threshold_tooltip = "Items with a confidence score below this value will not be\nconsidered a match. Lower values are more forgiving (better\nfor short clips and alternate microphones) but may produce\nfalse matches. Higher values are stricter but may miss valid\nmatches"
+local show_report = true
+local move_to_new_track = true
+local time_start, time_end = reaper.GetSet_LoopTimeRange2(0, false, false, 0, 0, false)
+local time_start_string
+local time_end_string
+local time_length_string
+local range_is_time_selection = false
+local range_is_track = true
+local track_combo_preview
+local proj = reaper.EnumProjects(-1)
+local dirty = reaper.IsProjectDirty(0)
+local report_table
+local use_first_selected_track = true
+local track
+local display_confidence_threshold = 7
+local raw_confidence_threshold = (display_confidence_threshold / 10) * RAW_CONFIDENCE_SCALE_MAX
+local threshold_slider = false
+local report_selection = -1
+local match_found = false
+local match_track
+local results = {}
+local valid_items = {}
+local invalid_items = {}
+local processing = false
+local processing_items = nil
+local processing_index = 1
+local processing_results = {}
+local current_alignment = nil
+local ref_track = nil
+local finalize = false
+local processing_time
+local processing_time_string
+local match_count = 0
+local no_match_count = 0
+local invalid_count = 0
+local total_count
+
+
+
 
 
 local function Msg(param)
@@ -346,6 +399,102 @@ local function is_silent(x)
     return (sum / #x) < 1e-5
 end
 
+local function SelectAnalysisRegion(q)
+
+    local max_samples = math.floor(ANALYSIS_MAX_SEC * SR)
+
+    -- short clips use entire query
+    if #q <= max_samples then
+        return q, 0
+    end
+
+    local step_samples = math.floor(ANALYSIS_SCAN_STEP_SEC * SR)
+
+    local best_start = 1
+    local best_score = -1
+
+    for start_idx = 1, (#q - max_samples), step_samples do
+
+        local segment = {}
+
+        for i = 0, max_samples - 1 do
+            segment[i + 1] = q[start_idx + i]
+        end
+
+        segment = normalize(segment)
+
+        local env = envelope(segment, false)
+
+        local peaks = get_peaks(env)
+
+        -- score by peak count
+        local score = #peaks
+
+        if score > best_score then
+            best_score = score
+            best_start = start_idx
+        end
+    end
+
+    local best_segment = {}
+
+    for i = 0, max_samples - 1 do
+        best_segment[i + 1] = q[best_start + i]
+    end
+
+    local offset_sec = (best_start - 1) / SR
+
+    return best_segment, offset_sec
+end
+
+local function compute_eta(state)
+    local now = reaper.time_precise()
+    local elapsed = now - state.start_real_time
+
+    local range = state.search_end - state.search_start
+    if range <= 0 then return nil end
+
+    local progress = (state.current_t - state.search_start) / range
+    progress = math.max(0, math.min(1, progress))
+
+    if progress < 0.01 then
+        return nil -- not enough data yet
+    end
+
+    local total_est = elapsed / progress
+    local remaining = total_est - elapsed
+
+    if remaining < 0 then remaining = 0 end
+
+    return remaining, progress
+end
+
+local function GetGlobalETA(current_alignment)
+    local now = reaper.time_precise()
+    local elapsed = now - processing_start_time
+
+    local total = #valid_items
+    if total == 0 then return nil end
+
+    -- completed full items
+    local done = processing_index -1
+
+    -- add partial progress of current item
+    local partial = 0
+    if current_alignment and current_alignment.search_end > current_alignment.search_start then
+        partial = (current_alignment.current_t - current_alignment.search_start) / (current_alignment.search_end - current_alignment.search_start)
+        partial = math.max(0, math.min(1, partial))
+    end
+
+    local progress = (done + partial) / total
+    progress = math.max(0.0001, math.min(1, progress))
+
+    local total_est = elapsed / progress
+    local remaining = total_est - elapsed
+
+    return remaining, progress
+end
+
 local function BeginAlignment(item, track, search_start, search_end)
     local q = read_audio(item)
 
@@ -360,6 +509,10 @@ local function BeginAlignment(item, track, search_start, search_end)
     search_end = math.min(search_end, track_len)
 
     local query_len_sec = #q / SR
+    local analysis_offset_sec = 0
+    q, analysis_offset_sec = SelectAnalysisRegion(q)
+    query_len_sec = #q / SR
+
     local is_short = query_len_sec < 2.0
 
     local step_sec = query_len_sec * 0.5
@@ -387,16 +540,16 @@ local function BeginAlignment(item, track, search_start, search_end)
         best_score = 0,
         best_votes = nil,
         best_total = 0,
-        found_audio = false
+        found_audio = false,
+        analysis_offset_sec = analysis_offset_sec,
+        start_real_time = reaper.time_precise()
     }
 end
 
 local function ProcessAlignmentChunk(state)
-    for i = 1, WINDOWS_PER_FRAME do
-        if
-            state.current_t >
-                math.min(state.search_end - state.query_len_sec, reaper.GetProjectLength(0) - state.query_len_sec)
-         then
+    local frame_start = reaper.time_precise()
+    while true do
+        if state.current_t > math.min(state.search_end - state.query_len_sec, reaper.GetProjectLength(0) - state.query_len_sec) then
             return true
         end
 
@@ -422,7 +575,7 @@ local function ProcessAlignmentChunk(state)
 
                     state.best_offset_samples = offset
 
-                    state.best_offset_time = state.current_t + (offset / SR)
+                    state.best_offset_time = state.current_t + (offset / SR) - state.analysis_offset_sec
 
                     state.best_votes = votes
                     state.best_total = total_votes
@@ -431,6 +584,9 @@ local function ProcessAlignmentChunk(state)
         end
 
         state.current_t = state.current_t + state.step_sec
+        if (reaper.time_precise() - frame_start) >= FRAME_BUDGET then
+            break
+        end
     end
 
     return false
@@ -1071,42 +1227,11 @@ local function Exit()
     reaper.set_action_options(8)
 end
 
-local main_window_flags = ImGui.WindowFlags_AlwaysAutoResize | ImGui.WindowFlags_TopMost
-local threshold_tooltip =
-    "Items with a confidence score below this value will not be\nconsidered a match. Lower values are more forgiving (better\nfor short clips and alternate microphones) but may produce\nfalse matches. Higher values are stricter but may miss valid\nmatches"
-local show_report = true
-local move_to_new_track = true
-local time_start, time_end = reaper.GetSet_LoopTimeRange2(0, false, false, 0, 0, false)
-local time_start_string
-local time_end_string
-local time_length_string
-local range_is_time_selection = false
-local range_is_track = true
-local track_combo_preview
+
 local guid = GetProjectGUID()
 local guid_changed = false
-local proj = reaper.EnumProjects(-1)
-local dirty = reaper.IsProjectDirty(0)
-local report_table
-local use_first_selected_track = true
-local track
-local display_confidence_threshold = 7
-local raw_confidence_threshold = (display_confidence_threshold / 10) * RAW_CONFIDENCE_SCALE_MAX
-local threshold_slider = false
-local report_selection = -1
-local match_found = false
-local match_track
-local results = {}
-local valid_items = {}
-local invalid_items = {}
-local processing = false
-local processing_items = nil
-local processing_index = 1
-local processing_results = {}
-local current_alignment = nil
-local ref_track = nil
-local finalize = false
-local benchmark_start
+
+
 
 
 local function Main()
@@ -1215,7 +1340,6 @@ local function Main()
     end
 
     if not processing and #processing_results > 0 then
-
         for i = 1, #processing_results do
             local result = processing_results[i]
             local raw_confidence = result.raw_confidence
@@ -1227,9 +1351,11 @@ local function Main()
                     string.format("%.2f", math.min(10, (raw_confidence / RAW_CONFIDENCE_SCALE_MAX) * 10))
                 note = "Match found"
                 match_found = true
+                match_count = match_count + 1
             else
                 note = "No matches found"
                 position = nil
+                no_match_count = no_match_count + 1
             end
             local t = {
                 item = result.item,
@@ -1247,6 +1373,7 @@ local function Main()
 
     if finalize then
         reaper.Undo_BeginBlock()
+        invalid_count = #invalid_items
         if match_found and move_to_new_track then
             local new_track_idx = reaper.GetMediaTrackInfo_Value(ref_track, "IP_TRACKNUMBER")
             reaper.InsertTrackInProject(0, new_track_idx, 0)
@@ -1254,7 +1381,6 @@ local function Main()
             reaper.GetSetMediaTrackInfo_String(match_track, "P_NAME", "ReaSync Matches", true)
         end
         for i = 1, #results do
-            local item = results[i].item
             if results[i].note == "Match found" then
                 reaper.SetMediaItemInfo_Value(results[i].item, "D_POSITION", results[i].position)
                 if move_to_new_track then
@@ -1262,7 +1388,10 @@ local function Main()
                 end
             end
         end
-        if not match_found then
+        processing_time = reaper.time_precise() - processing_start_time
+        processing_time_string = reaper.format_timestr_len(math.floor(processing_time), "",0,0)
+        processing_time_string = string.sub(processing_time_string, 1, -5)
+        if not match_found and not show_report then
             reaper.MB("No matches found", ScriptName, 0)
         end
         match_found = false
@@ -1275,7 +1404,7 @@ local function Main()
         valid_items = {}
         invalid_items = {}
         finalize = false
-        Msg(reaper.time_precise() -benchmark_start)
+        Msg(processing_time)
         reaper.Undo_EndBlock(ScriptName, 0)
     end
 
@@ -1343,7 +1472,7 @@ local function Main()
         end
         ImGui.NewLine(ctx)
         if ImGui.Button(ctx, "Sync", 70, 40) then
-            benchmark_start = reaper.time_precise()
+            processing_start_time = reaper.time_precise()
             local err
             ref_track = track
             local track_muted = false
@@ -1365,6 +1494,8 @@ local function Main()
                 reaper.MB(err, ScriptName, 0)
             else
                 local items = GetSelectedItems()
+                match_count = 0
+                no_match_count = 0
                 for i = 1, #items do
                     local item = items[i]
                     local item_length = reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
@@ -1447,6 +1578,13 @@ local function Main()
                 local total_items = math.max(1,#processing_items)
                 local completed_items = processing_index - 1
                 local current_item_progress = 0
+
+                local time_remaining = GetGlobalETA(current_alignment)
+                local time_elapsed =  reaper.time_precise()- processing_start_time
+                local time_elapsed_string = reaper.format_timestr_len(math.floor(time_elapsed), "",0,0)
+                time_elapsed_string = string.sub(time_elapsed_string, 1, -5)
+                local time_remaining_string = reaper.format_timestr_len(math.floor(time_remaining), "",0,0)
+                time_remaining_string = string.sub(time_remaining_string, 1, -5)
                 if current_alignment then
                     local search_range = current_alignment.search_end - current_alignment.search_start
                     if search_range > 0 then 
@@ -1456,9 +1594,13 @@ local function Main()
                 end
                 local overall_progress = (completed_items + current_item_progress) / total_items
                 overall_progress = math.max (0, math.min(1, overall_progress))
-                ImGui.Text(ctx, "Matching waveforms...")
+                ImGui.Text(ctx, "Estimated Time Remaining: "..time_remaining_string)
                 ImGui.ProgressBar(ctx, overall_progress, 300, 20)
                 ImGui.Text(ctx, string.format("Scanning item %d of %d", math.min(processing_index + #invalid_items, total_items + #invalid_items), total_items + #invalid_items))
+                if processing_index <= #processing_items then
+                    ImGui.SameLine(ctx)
+                    ImGui.Text(ctx, processing_items[processing_index].name)
+                end
                 if total_items > 1 then
                     if current_alignment then
                         ImGui.Text(ctx, string.format("%.1f%%", current_item_progress*100))
@@ -1473,7 +1615,7 @@ local function Main()
                     invalid_items = {}
                     processing = false
                     current_alignment = nil
-                end                
+                end
                 ImGui.EndPopup(ctx)
             end
         end
@@ -1481,6 +1623,8 @@ local function Main()
         if report_table then
             local table_flags = ImGui.TableFlags_ScrollY | ImGui.TableFlags_SizingFixedFit | ImGui.TableFlags_Sortable
             local selectable_flags = ImGui.SelectableFlags_SpanAllColumns | ImGui.SelectableFlags_NoAutoClosePopups
+            local _, track_name = reaper.GetSetMediaTrackInfo_String(track, "P_NAME", "", false)
+            local track_number = string.format("%d", reaper.GetMediaTrackInfo_Value(track, "IP_TRACKNUMBER"))
             ImGui.OpenPopup(ctx, ScriptName .. " Report")
             if ImGui.BeginPopupModal(ctx, ScriptName .. " Report", true, ImGui.WindowFlags_AlwaysAutoResize) then
                 PassShortcut(section_id, focused_window)
@@ -1526,6 +1670,16 @@ local function Main()
                         ImGui.Text(ctx, report_table[i].display_confidence)
                     end
                     ImGui.EndTable(ctx)
+                    ImGui.Separator(ctx)
+                    ImGui.Text(ctx, "Syncing finished in "..processing_time_string)
+                    ImGui.Text(ctx, "Number of items: "..tostring(#report_table))
+                    ImGui.Text(ctx, "Matches found: " .. tostring (match_count))
+                    if no_match_count > 0 then
+                        ImGui.Text(ctx, "Failed to match: ".. tostring(no_match_count))
+                    end
+                    if invalid_count > 0 then 
+                        ImGui.Text(ctx, "Invalid Items: "..invalid_count)
+                    end
                 end
                 ImGui.EndPopup(ctx)
             else

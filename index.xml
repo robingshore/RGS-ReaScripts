@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="RGS ReaScripts" commit="4b3ccc64eeeefca1294dec315dbcc9c49aade9f1">
+<index version="1" name="RGS ReaScripts" commit="c8540585f72c116b09ea3c8be7c84f2849180286">
   <category name="Automation/Latch Presets">
     <reapack name="RGS_Clear latch preset (prompt for preset number).lua" type="script" desc="Save/Load/Clear latch presets with prompt for preset number">
       <metadata>
@@ -1960,6 +1960,7 @@
 {\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Option to move matched items to a new track\sa180\par}
 }
 ]]></description>
+        <link rel="website" href="https://forum.cockos.com/showthread.php?t=309136">Forum thread</link>
         <link rel="screenshot">https://i.ibb.co/sp1FjbSt/Screenshot-2026-05-20-at-16-05-40.png</link>
         <link rel="donation">https://paypal.me/robingshore</link>
       </metadata>
@@ -1973,6 +1974,10 @@
 - Show name of currently processing item
 - Show Summary at bottom of report]]></changelog>
         <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/4b3ccc64eeeefca1294dec315dbcc9c49aade9f1/Utility/RGS_ReaSync.lua</source>
+      </version>
+      <version name="1..2.0" author="Robin Shore" time="2026-05-24T12:59:24Z">
+        <changelog><![CDATA[- Fix crash when trying to sync very long items]]></changelog>
+        <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/c8540585f72c116b09ea3c8be7c84f2849180286/Utility/RGS_ReaSync.lua</source>
       </version>
     </reapack>
     <reapack name="RGS_Show Selected Item Count in Help Display if items are selected.lua" type="script" desc="Show selected item count in help display if any items are selected">

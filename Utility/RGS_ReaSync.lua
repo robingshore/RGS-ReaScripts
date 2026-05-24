@@ -1,7 +1,7 @@
 -- @description ReaSync
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.1.0
+-- @version 1..2.0
 -- @screenshot https://i.ibb.co/sp1FjbSt/Screenshot-2026-05-20-at-16-05-40.png
 -- @about 
 --  # ReaSync
@@ -24,15 +24,14 @@
 --  - ReaSync is intended to get items in the right place, not to achieve phase 
 --  or sample-accurate alignment.
 -- @changelog
---  - Smoother progress bar animation
---  - Show estimated time remaining while processing
---  - Show name of currently processing item
---  - Show Summary at bottom of report
+--  - Fix crash when trying to sync very long items
+-- @link Forum thread https://forum.cockos.com/showthread.php?t=309136
+--  
 --
 --  
 
 local ScriptName = "ReaSync"
-local ScriptVersion = "1.1.0"
+local ScriptVersion = "1.2.0"
 
 local show_debug_messages = false
 local SR = 2000
@@ -162,16 +161,29 @@ local function Msg(param)
     end
 end
 
-local function read_audio(item)
+local function read_audio(item, start_t, duration)
     local take = reaper.GetActiveTake(item)
     if not take then
         return nil
     end
     local accessor = reaper.CreateTakeAudioAccessor(take)
-    local start_t = reaper.GetAudioAccessorStartTime(accessor)
-    local end_t = reaper.GetAudioAccessorEndTime(accessor)
-    local len = end_t - start_t
-    local samples = math.floor(len * SR)
+    local accessor_start = reaper.GetAudioAccessorStartTime(accessor)
+    local accessor_end = reaper.GetAudioAccessorEndTime(accessor)
+
+    -- if no start/duration provided, read the whole item (clamped to ANALYSIS_MAX_SEC)
+    if not start_t then
+        start_t = accessor_start
+    end
+    if not duration then
+        duration = math.min(accessor_end - accessor_start, ANALYSIS_MAX_SEC)
+    end
+
+    -- clamp to accessor bounds
+    start_t = math.max(start_t, accessor_start)
+    local end_t = math.min(start_t + duration, accessor_end)
+    duration = end_t - start_t
+
+    local samples = math.floor(duration * SR)
     if samples < 10 then
         reaper.DestroyAudioAccessor(accessor)
         return nil
@@ -399,51 +411,53 @@ local function is_silent(x)
     return (sum / #x) < 1e-5
 end
 
-local function SelectAnalysisRegion(q)
+local function SelectAnalysisRegion(item)
+    local take = reaper.GetActiveTake(item)
+    if not take then return nil, 0 end
 
-    local max_samples = math.floor(ANALYSIS_MAX_SEC * SR)
+    local accessor = reaper.CreateTakeAudioAccessor(take)
+    local accessor_start = reaper.GetAudioAccessorStartTime(accessor)
+    local accessor_end = reaper.GetAudioAccessorEndTime(accessor)
+    reaper.DestroyAudioAccessor(accessor)
 
-    -- short clips use entire query
-    if #q <= max_samples then
+    local total_len = accessor_end - accessor_start
+    local max_sec = ANALYSIS_MAX_SEC
+    local step_sec = ANALYSIS_SCAN_STEP_SEC
+
+    -- short items: just read the whole thing
+    if total_len <= max_sec then
+        local q = read_audio(item, accessor_start, total_len)
         return q, 0
     end
 
-    local step_samples = math.floor(ANALYSIS_SCAN_STEP_SEC * SR)
-
-    local best_start = 1
+    local best_start_sec = accessor_start
     local best_score = -1
+    local best_segment = nil
 
-    for start_idx = 1, (#q - max_samples), step_samples do
-
-        local segment = {}
-
-        for i = 0, max_samples - 1 do
-            segment[i + 1] = q[start_idx + i]
+    local scan_t = accessor_start
+    while scan_t + max_sec <= accessor_end do
+        local segment = read_audio(item, scan_t, max_sec)
+        if segment then
+            local seg_normalized = normalize(segment)
+            local env = envelope(seg_normalized, false)
+            local peaks = get_peaks(env)
+            local score = #peaks
+            if score > best_score then
+                best_score = score
+                best_start_sec = scan_t
+                best_segment = segment
+            end
         end
-
-        segment = normalize(segment)
-
-        local env = envelope(segment, false)
-
-        local peaks = get_peaks(env)
-
-        -- score by peak count
-        local score = #peaks
-
-        if score > best_score then
-            best_score = score
-            best_start = start_idx
-        end
+        scan_t = scan_t + step_sec
     end
 
-    local best_segment = {}
-
-    for i = 0, max_samples - 1 do
-        best_segment[i + 1] = q[best_start + i]
+    -- handle the case where no valid segment was found
+    if not best_segment then
+        local q = read_audio(item, accessor_start, max_sec)
+        return q, 0
     end
 
-    local offset_sec = (best_start - 1) / SR
-
+    local offset_sec = best_start_sec - accessor_start
     return best_segment, offset_sec
 end
 
@@ -496,22 +510,19 @@ local function GetGlobalETA(current_alignment)
 end
 
 local function BeginAlignment(item, track, search_start, search_end)
-    local q = read_audio(item)
-
-    if not q then
-        return nil
-    end
-
     local track_len = reaper.GetProjectLength(0)
 
     search_start = search_start or 0
     search_end = search_end or track_len
     search_end = math.min(search_end, track_len)
 
+    local q, analysis_offset_sec = SelectAnalysisRegion(item)
+
+    if not q then
+        return nil
+    end
+
     local query_len_sec = #q / SR
-    local analysis_offset_sec = 0
-    q, analysis_offset_sec = SelectAnalysisRegion(q)
-    query_len_sec = #q / SR
 
     local is_short = query_len_sec < 2.0
 

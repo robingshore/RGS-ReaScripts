@@ -4,7 +4,7 @@
 -- @version 1.0.0
 -- @provides
 --    [main] *.lua
---    icons.otf
+--    Icons.otf
 -- @about 
 --  # Action Flash
 --
@@ -30,7 +30,53 @@ local function ToBoolean(str)
     return bool
 end
 
+local function TestVersion(version,version_min)
+  local i = 0
+  for num in string.gmatch(tostring(version),'%d+') do
+    i = i + 1
+    if version_min[i] and tonumber(num) > version_min[i] then
+      return true
+    elseif version_min[i] and tonumber(num) < version_min[i] then
+      return false
+    end
+  end
+  if i < #version_min then return false
+  else return true end
+end
 
+local no_imgui
+local no_js
+local missing_dependencies = ""
+if not reaper.ImGui_GetBuiltinPath then
+    no_imgui = true
+else    
+    local _,_,imgui_version = reaper.ImGui_GetVersion()
+    if not TestVersion(imgui_version,{0,10,0,5}) then
+        no_imgui = true
+    end
+end
+
+if no_imgui then
+    missing_dependencies = "ReaImGui (version 0.10.0.5 or higher)\n"
+end
+
+if not reaper.JS_Window_GetTitle then
+    no_js = true
+    missing_dependencies =  missing_dependencies.."js_ReaScriptAPI\n" 
+end
+
+if missing_dependencies ~= "" then 
+    reaper.MB("The following extensions are\nrequired to run this script:\n\n"..missing_dependencies.."\nPlease install the missing extensions\nand run the script again",ScriptName, 0)
+    if reaper.ReaPack_BrowsePackages then
+        if no_imgui then
+            reaper.ReaPack_BrowsePackages("ReaImGui: ReaScript binding for Dear ImGui")
+        end
+        if no_js then
+            reaper.ReaPack_BrowsePackages("js_ReaScriptAPI: API functions for ReaScripts")
+        end
+    end
+    return
+end
 
 package.path = reaper.ImGui_GetBuiltinPath() .. '/?.lua'
 local ImGui = require 'imgui' '0.10.0.5'

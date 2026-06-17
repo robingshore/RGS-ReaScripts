@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="RGS ReaScripts" commit="c8540585f72c116b09ea3c8be7c84f2849180286">
+<index version="1" name="RGS ReaScripts" commit="befd5d401ca5d2fa8695b877ea9fb8d66b6b1b89">
   <category name="Automation/Latch Presets">
     <reapack name="RGS_Clear latch preset (prompt for preset number).lua" type="script" desc="Save/Load/Clear latch presets with prompt for preset number">
       <metadata>
@@ -1994,6 +1994,27 @@
       </metadata>
       <version name="1.0.1" author="Robin Shore" time="2026-01-15T16:59:13Z">
         <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/ed2dccea861ac073965d94062bba298bb4481fc0/Utility/RGS_Show%20Selected%20Item%20Count%20in%20Help%20Display%20if%20items%20are%20selected.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Utility/Action Flash">
+    <reapack name="RGS_Action Flash.lua" type="script" desc="Action Flash">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 Action Flash\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\b Action Flash} is a keystroke visualizer for Reaper. When Action Dlash is active, anytime an action is triggered by keystroke in reaper, a small popup window showing the keyboard shortcut and the action name will temporarily flash on screen.\par}
+}
+]]></description>
+        <link rel="donation">https://paypal.me/robingshore</link>
+      </metadata>
+      <version name="1.0.0" author="Robin Shore" time="2026-06-17T16:02:17Z">
+        <changelog><![CDATA[- Initial Release]]></changelog>
+        <source main="main" file="RGS_Action Flash - Toggle Start &amp; Stop.lua">https://github.com/robingshore/RGS-ReaScripts/raw/befd5d401ca5d2fa8695b877ea9fb8d66b6b1b89/Utility/Action%20Flash/RGS_Action%20Flash%20-%20Toggle%20Start%20&amp;%20Stop.lua</source>
+        <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/befd5d401ca5d2fa8695b877ea9fb8d66b6b1b89/Utility/Action%20Flash/RGS_Action%20Flash.lua</source>
+        <source file="Icons.otf">https://github.com/robingshore/RGS-ReaScripts/raw/befd5d401ca5d2fa8695b877ea9fb8d66b6b1b89/Utility/Action%20Flash/Icons.otf</source>
       </version>
     </reapack>
   </category>

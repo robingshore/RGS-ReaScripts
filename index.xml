@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="RGS ReaScripts" commit="befd5d401ca5d2fa8695b877ea9fb8d66b6b1b89">
+<index version="1" name="RGS ReaScripts" commit="9f2805533d2c13022b635dff213f3bf8dafa05b5">
   <category name="Automation/Latch Presets">
     <reapack name="RGS_Clear latch preset (prompt for preset number).lua" type="script" desc="Save/Load/Clear latch presets with prompt for preset number">
       <metadata>
@@ -2015,6 +2015,12 @@
         <source main="main" file="RGS_Action Flash - Toggle Start &amp; Stop.lua">https://github.com/robingshore/RGS-ReaScripts/raw/befd5d401ca5d2fa8695b877ea9fb8d66b6b1b89/Utility/Action%20Flash/RGS_Action%20Flash%20-%20Toggle%20Start%20&amp;%20Stop.lua</source>
         <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/befd5d401ca5d2fa8695b877ea9fb8d66b6b1b89/Utility/Action%20Flash/RGS_Action%20Flash.lua</source>
         <source file="Icons.otf">https://github.com/robingshore/RGS-ReaScripts/raw/befd5d401ca5d2fa8695b877ea9fb8d66b6b1b89/Utility/Action%20Flash/Icons.otf</source>
+      </version>
+      <version name="1.1.0" author="Robin Shore" time="2026-06-18T10:01:11Z">
+        <changelog><![CDATA[- Toggle start/stop action opens main script ]]></changelog>
+        <source main="main" file="RGS_Action Flash - Toggle Start &amp; Stop.lua">https://github.com/robingshore/RGS-ReaScripts/raw/9f2805533d2c13022b635dff213f3bf8dafa05b5/Utility/Action%20Flash/RGS_Action%20Flash%20-%20Toggle%20Start%20&amp;%20Stop.lua</source>
+        <source main="main">https://github.com/robingshore/RGS-ReaScripts/raw/9f2805533d2c13022b635dff213f3bf8dafa05b5/Utility/Action%20Flash/RGS_Action%20Flash.lua</source>
+        <source file="Icons.otf">https://github.com/robingshore/RGS-ReaScripts/raw/9f2805533d2c13022b635dff213f3bf8dafa05b5/Utility/Action%20Flash/Icons.otf</source>
       </version>
     </reapack>
   </category>

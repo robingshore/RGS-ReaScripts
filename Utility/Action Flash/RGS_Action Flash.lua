@@ -1,7 +1,7 @@
 -- @description Action Flash
 -- @author Robin Shore
 -- @donation https://paypal.me/robingshore
--- @version 1.0.0
+-- @version 1.1.0
 -- @provides
 --    [main] *.lua
 --    Icons.otf
@@ -13,8 +13,7 @@
 --  window showing the keyboard shortcut and the action name will temporarily
 --  flash on screen.
 -- @changelog
---  - Initial Release
-
+--  - Toggle start/stop action opens main script 
 
 --------------------------Debug & Testing -----------------------------------
 local function Msg(param)
